@@ -52,7 +52,7 @@ for contour in contours:
 
     # Draw contours
     cnt = contours[4]
-    cv.drawContours(img, [cnt], 0, (0,255,0), 3)
+    cv2.drawContours(img, [cnt], 0, (0,255,0), 3)
     #cv2.drawContours(img, [contour], 0, (0, 0, 255), 5)
 
     # Calculate the center point of the shape
