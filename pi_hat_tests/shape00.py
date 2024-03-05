@@ -63,6 +63,8 @@ for contour in contours:
         cv2.putText(img, 'Quadrilateral', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
     elif len(approx) == 5:
         cv2.putText(img, 'Pentagon', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    else: 
+        cv2.putText(img, 'circle', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2) 
 
 # Display the result as a JPEG image
 cv2.imwrite('processed_image.jpg', img)
