@@ -1,3 +1,5 @@
+# Code from https://www.geeksforgeeks.org/how-to-detect-shapes-in-images-in-python-using-opencv/
+
 import cv2 
 #reading the image  
 image = cv2.imread("example.jpg") 
