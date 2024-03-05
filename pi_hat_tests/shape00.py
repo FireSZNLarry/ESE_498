@@ -40,8 +40,10 @@ i = 0
 for contour in contours:
     # Ignore the first contour (whole image)
     if i == 0:
-        i = 30
+        i = 1
         continue
+            if i == 40:
+                end
 
     # Approximate the shape using cv2.approxPolyDP()
     #epsilon = 1 * cv2.arcLength(contour, True)
