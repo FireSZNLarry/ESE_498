@@ -13,7 +13,7 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1440)
 # take frame
 ret, frame = cap.read()
 #flip frame takes pictures right side up
-flipped_frame = cv2.flip(frmae,0)
+flipped_frame = cv2.flip(frame,0)
 
 # write frame to file
 cv2.imwrite('./Desktop/image.jpg', flipped_frame)
