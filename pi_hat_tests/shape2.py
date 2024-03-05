@@ -16,7 +16,7 @@ flipped_frame = cv2.flip(frame,0)
 # write frame to file
 cv2.imwrite('image1.jpg', flipped_frame)
 # release camera
-cap.release()
+#cap.release()
 
 #reading the image  
 image = cv2.imread("image1.jpg") 
