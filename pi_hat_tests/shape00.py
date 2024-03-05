@@ -42,8 +42,8 @@ for contour in contours:
     if i == 0:
         i = 1
         continue
-            if i == 40:
-                end
+    if i == 40:
+        end
 
     # Approximate the shape using cv2.approxPolyDP()
     #epsilon = 1 * cv2.arcLength(contour, True)
