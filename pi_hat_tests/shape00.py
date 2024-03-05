@@ -51,7 +51,9 @@ for contour in contours:
     approx = cv2.approxPolyDP(contour, epsilon, True)
 
     # Draw contours
-    cv2.drawContours(img, [contour], 0, (0, 0, 255), 5)
+    cnt = contours[4]
+    cv.drawContours(img, [cnt], 0, (0,255,0), 3)
+    #cv2.drawContours(img, [contour], 0, (0, 0, 255), 5)
 
     # Calculate the center point of the shape
     M = cv2.moments(contour)
