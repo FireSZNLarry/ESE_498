@@ -3,7 +3,14 @@
 import cv2 
 import numpy as np 
 from matplotlib import pyplot as plt 
-  
+
+camera = PiCamera()
+camera.resolution = (1024, 768)
+camera.start_preview()
+# Camera warm-up time
+sleep(2)
+camera.capture('shapes.png')
+
 # reading image 
 img = cv2.imread('shapes.png') 
   
