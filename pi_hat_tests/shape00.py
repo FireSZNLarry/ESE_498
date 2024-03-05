@@ -44,8 +44,8 @@ for contour in contours:
         continue
 
     # Approximate the shape using cv2.approxPolyDP()
-    epsilon = 1 * cv2.arcLength(contour, True)
-    #epsilon = 0.01 * cv2.arcLength(contour, True)
+    #epsilon = 1 * cv2.arcLength(contour, True)
+    epsilon = 0.01 * cv2.arcLength(contour, True)
     approx = cv2.approxPolyDP(contour, epsilon, True)
 
     # Draw contours
