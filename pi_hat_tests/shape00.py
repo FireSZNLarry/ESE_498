@@ -42,7 +42,7 @@ for contour in contours:
     if i == 0:
         i = 1
         continue
-    if i == 6:
+    if i == 2:
         end
 
     # Approximate the shape using cv2.approxPolyDP()
