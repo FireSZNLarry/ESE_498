@@ -70,6 +70,10 @@ if amount_found != 0:
                       (0, 255, 0), 5)
 
 
-
+# Creates the environment of 
+# the picture and shows it
+plt.subplot(1, 1, 1)
+plt.imshow(img_rgb)
+plt.show()
 
 
