@@ -1,30 +1,59 @@
 import cv2
+import numpy as np
 from matplotlib import pyplot as plt
 
-# Load the cascade classifier for shape detection
-stop_data = cv2.CascadeClassifier('stop_data.xml')
+# Capture video from the camera (video0)
+cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
 
-# Read the image
-img = cv2.imread("flipped_image.jpg")
-img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# Set dimensions
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2560)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1440)
 
-# Detect shapes
-found = stop_data.detectMultiScale(img_gray, minSize=(20, 20))
+# Take a frame
+ret, frame = cap.read()
 
-# Check if any shapes were found
-amount_found = len(found)
+# Flip the frame to display it right side up
+flipped_frame = cv2.flip(frame, 0)
 
-if amount_found != 0:
-    # Draw rectangles around detected shapes
-    for (x, y, width, height) in found:
-        cv2.rectangle(img, (x, y), (x + width, y + height), (0, 255, 0), 5)
+# Write the frame to a file
+cv2.imwrite('image1.jpg', flipped_frame)
 
-    # Display the result
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    plt.imshow(img_rgb)
-    plt.show()
-else:
-    print("No shapes detected in the image.")
+# Release the camera
+cap.release()
 
-# Release resources
-cv2.destroyAllWindows()
+# Read the saved image
+img = cv2.imread('image1.jpg')
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Apply thresholding to create a binary image
+_, threshold = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+
+# Find contours in the binary image
+contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+# Initialize a counter
+i = 0
+
+# List for storing shape names
+for contour in contours:
+    # Ignore the first contour (whole image)
+    if i == 0:
+        i = 1
+        continue
+
+    # Approximate the shape using cv2.approxPolyDP()
+    epsilon = 0.01 * cv2.arcLength(contour, True)
+    approx = cv2.approxPolyDP(contour, epsilon, True)
+
+    # Draw contours
+    cv2.drawContours(img, [contour], 0, (0, 0, 255), 5)
+
+    # Calculate the center point of the shape
+    M = cv2.moments(contour)
+    if M['m00'] != 0.0:
+        x = int(M['m10'] / M['m00'])
+        y = int(M['m01'] / M['m00'])
+
+    # Put
