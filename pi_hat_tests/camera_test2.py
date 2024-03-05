@@ -13,6 +13,6 @@ ret, frame = cap.read()
 flipped_frame = cv2.flip(frame,0)
 
 # write frame to file
-cv2.imwrite('./Desktop/image.jpg', flipped_frame)
+cv2.imwrite('flipped_image.jpg', flipped_frame)
 # release camera
 cap.release()
