@@ -1,3 +1,5 @@
+# Code from https://www.geeksforgeeks.org/how-to-detect-shapes-in-images-in-python-using-opencv/
+
 import cv2 
 import numpy as np 
 from matplotlib import pyplot as plt 
