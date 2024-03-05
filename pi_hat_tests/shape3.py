@@ -50,8 +50,7 @@ plt.show()
 # bothering with extra-small 
 # dots that would look like STOP signs
 stop_data = cv2.CascadeClassifier('stop_data.xml')
-found = stop_data.detectMultiScale(img_gray, 
-                                   minSize =(20, 20))
+found = stop_data.detectMultiScale(img_gray,minSize =(20, 20))
 # Don't do anything if there's 
 # no sign
 amount_found = len(found)
