@@ -4,15 +4,26 @@ import cv2
 import numpy as np 
 from matplotlib import pyplot as plt 
 
-camera = PiCamera()
-camera.resolution = (1024, 768)
-camera.start_preview()
-# Camera warm-up time
-sleep(2)
-camera.capture('shapes.png')
+cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+
+# set dimensions
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2560)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1440)
+
+# take frame
+ret, frame = cap.read()
+#flip frame takes pictures right side up
+flipped_frame = cv2.flip(frmae,0)
+
+# write frame to file
+cv2.imwrite('./Desktop/image.jpg', flipped_frame)
+# release camera
+cap.release()
+
+
 
 # reading image 
-img = cv2.imread('shapes.png') 
+img = cv2.imread('./Desktop/image.jpg') 
   
 # converting image into grayscale image 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
