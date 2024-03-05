@@ -40,7 +40,7 @@ i = 0
 for contour in contours:
     # Ignore the first contour (whole image)
     if i == 0:
-        i = 5
+        i = 1
         continue
 
     # Approximate the shape using cv2.approxPolyDP()
