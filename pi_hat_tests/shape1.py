@@ -16,14 +16,14 @@ ret, frame = cap.read()
 flipped_frame = cv2.flip(frame,0)
 
 # write frame to file
-cv2.imwrite('./Desktop/image.jpg', flipped_frame)
+cv2.imwrite('image1.jpg', flipped_frame)
 # release camera
 cap.release()
 
 
 
 # reading image 
-img = cv2.imread('./Desktop/image.jpg') 
+img = cv2.imread('image1.jpg') 
   
 # converting image into grayscale image 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
