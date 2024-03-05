@@ -56,4 +56,21 @@ for contour in contours:
         x = int(M['m10'] / M['m00'])
         y = int(M['m01'] / M['m00'])
 
-    # Put
+    # Put the shape name at the center of each shape
+    if len(approx) == 3:
+        cv2.putText(img, 'Triangle', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    elif len(approx) == 4:
+        cv2.putText(img, 'Quadrilateral', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    elif len(approx) == 5:
+        cv2.putText(img, 'Pentagon', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+
+# Display the result as a JPEG image
+cv2.imwrite('processed_image.jpg', img)
+
+# Release resources
+cv2.destroyAllWindows()
+
+# Show the processed image
+plt.imshow(img)
+plt.axis('off')  # Hide axes
+plt.show()
