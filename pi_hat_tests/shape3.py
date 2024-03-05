@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import imutils
 
 # Load the object detection model
 model = cv2.dnn.readNetFromTensorflow('models/MobileNetSSD_deploy.prototxt', 
