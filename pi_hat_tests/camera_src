@@ -1,0 +1,52 @@
+   1 #include <ros/ros.h>
+   2 #include <image_transport/image_transport.h>
+   3 #include <opencv2/highgui/highgui.hpp>
+   4 #include <cv_bridge/cv_bridge.h>
+   5 #include <sstream> // for converting the command line parameter to integer
+   6 
+   7 int main(int argc, char** argv){
+   8   // Check if video source has been passed as a parameter
+   9   if(argv[1] == NULL) return 1;
+  10 
+  11   ros::init(argc, argv, "image_publisher");
+  12   ros::NodeHandle nh;
+  13   image_transport::ImageTransport it(nh);
+  14   image_transport::Publisher pub = it.advertise("cam_pub", 1);
+  15   int cam_device;
+  16   //condition to verify if the camera device was passed as the first
+  17   //terminal parameter "argv[1]" or as the "cam_device" parameter in the .launch.
+  18   //id 0 device is passed as default
+  19   if (argc < 2)
+  20      nh.param("cam_device", cam_device, 0);
+  21   else{
+  22      // Convert the passed as command line parameter index
+  23      //for the video device to an integer
+  24      std::istringstream cam_deviceCmd(argv[1]);
+  25      // Check if it is indeed a number
+  26      if(!(cam_deviceCmd >> cam_device)) return 1;
+  27   }
+  28   //initialize a VideoCapture variable to get camera data
+  29   cv::VideoCapture cap(cam_device);
+  30   // Check if video device can be opened with the given index
+  31   if(!cap.isOpened()) return 1;
+  32   cv::Mat frame;
+  33   sensor_msgs::ImagePtr msg;
+  34 
+  35   int image_show;
+  36   nh.param("image_show", image_show, 0);
+  37 
+  38   while (nh.ok()) {
+  39      cap >> frame;
+  40      //show the image
+  41      if (image_show){
+  42         cv::imshow("Cam View", frame);
+  43         cv::waitKey(30);
+  44      }
+  45      //Check if grabbed frame is actually full with some content,
+  46      //then publish the image
+  47      if(!frame.empty()) {
+  48         msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
+  49         pub.publish(msg);
+  50      }
+  51   }
+  52 }
