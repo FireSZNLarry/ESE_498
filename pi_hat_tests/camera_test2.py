@@ -5,7 +5,7 @@ cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
 
 # Check if camera opened successfully
 if not cap.isOpened():
-    print("Error opening camera.")
+    print("Error opening camera. Make sure it is connected and accessible.")
     exit()
 
 # Set dimensions
@@ -18,6 +18,7 @@ ret, frame = cap.read()
 # Check if frame is captured successfully
 if not ret:
     print("Error capturing frame.")
+    cap.release()
     exit()
 
 # Flip the frame (takes pictures right side up)
