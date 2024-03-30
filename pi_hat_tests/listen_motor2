@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+
+import rospy
+from std_msgs.msg import String
+import time
+import math
+from board import SCL, SDA
+import busio
+from adafruit_pca9685 import PCA9685
+import adafruit_motor.servo
+
+# Initialize ROS node
+rospy.init_node('motor_controller', anonymous=True)
+
+# Global status to track keyboard inputs
+status = 0
+
+# Function to initialize PCA9685 and return PCA object
+def Servo_Motor_Initialization():
+    i2c_bus = busio.I2C(SCL, SDA)
+    pca = PCA9685(i2c_bus)
+    pca.frequency = 100
+    return pca
+
+# Function to start the motor with initialization steps
+def Motor_Start(pca):
+    x = input("Press and hold EZ button. Once the LED turns red, immediately release the button. After the LED blinks red once, press 'ENTER' on the keyboard.")
+    Motor_Speed(pca, 1)
+    time.sleep(2)
+    y = input("If the LED just blinked TWICE, then press 'ENTER' on the keyboard.")
+    Motor_Speed(pca, -1)
+    time.sleep(2)
+    z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on the keyboard to proceed")
+
+# Function to set motor speed
+def Motor_Speed(pca, percent):
+    # Converts a -1 to 1 value to 16-bit duty cycle
+    speed = ((percent) * 3277) + 65535 * 0.15
+    pca.channels[15].duty_cycle = math.floor(speed)
+    print(speed/65535)
+
+# Initialize PCA9685 motor controller
+pca = Servo_Motor_Initialization()
+
+# Start the motor
+Motor_Start(pca)
+
+# Function to control the motor based on status
+def control_motor(status):
+    if status == 0:
+        Motor_Speed(pca, 0)  # Stop the motor
+    elif status == 1:
+        Motor_Speed(pca, 0.15)  # Start the motor in forward direction
+    else:
+        pass
+
+# Function to handle keyboard input
+def call_key(data):
+    global status
+    key = int(data.data)
+    if key == 0:
+        status = 0  # Stop the motor
+    elif key == 1:
+        status = 1  # Start the motor in forward direction
+    rospy.loginfo(rospy.get_caller_id() + ' Keyboard %s', data.data)
+
+# Subscribe to keyboard topic
+rospy.Subscriber('keyboard', String, call_key)
+
+# Main listener function
+def listener():
+    rospy.Subscriber('keyboard', String, call_key)
+    rospy.spin()
+
+# Call the listener function
+if __name__ == '__main__':
+    listener()
