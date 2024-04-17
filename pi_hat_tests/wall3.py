@@ -1,311 +1,224 @@
-#! /usr/bin/env python
+# SPDX-FileCopyrightText: 2019 Dave Astels for Adafruit Industries
+#
+# SPDX-License-Identifier: MIT
 
-# ROS imports
-import rospy
-from sensor_msgs.msg import LaserScan
-from geometry_msgs.msg import Twist
-#from tf import transformations
-#from datetime import datetime
 
-# Util imports
-import random
-import math
+"""
+Consume LIDAR measurement file and create an image for display.
+
+Adafruit invests time and resources providing this open source code.
+Please support Adafruit and open source hardware by purchasing
+products from Adafruit!
+
+Written by Dave Astels for Adafruit Industries
+Copyright (c) 2019 Adafruit Industries
+Licensed under the MIT license.
+
+All text above must be included in any redistribution.
+"""
+
+import os
+from math import cos, sin, pi, floor
+import pygame
+from adafruit_rplidar import RPLidar
 import time
+import numpy as np
+#import motorControl as momo
+import busio
+from board import SCL, SDA
+from adafruit_pca9685 import PCA9685
+from adafruit_motor import servo
+import cv2
+#from picamera import PiCamera
+import threading
+import queue
 
-hz = 20                     # Cycle Frequency
-loop_index = 0              # Number of sampling cycles
-loop_index_outer_corner = 0 # Loop index when the outer corner is detected
-loop_index_inner_corner = 0 # Loop index when the inner corner is detected
-inf = 5                     # Limit to Laser sensor range in meters, all distances above this value are 
-                            #      considered out of sensor range
-wall_dist = 0.5             # Distance desired from the wall
-max_speed = 0.3             # Maximum speed of the robot on meters/seconds
-p = 15                      # Proportional constant for controller  
-d = 0                       # Derivative constant for controller 
-angle = 1                   # Proportional constant for angle controller (just simple P controller)
-direction = -1              # 1 for wall on the left side of the robot (-1 for the right side)
-e = 0                       # Diference between current wall measurements and previous one
-angle_min = 0               # Angle, at which was measured the shortest distance between the robot and a wall
-dist_front = 0              # Measured front distance
-diff_e = 0                  # Difference between current error and previous one
-dist_min = 0                # Minimum measured distance
+i2c = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c)
+pca.frequency = 100
+channel_num = 14
+servo7 = servo.Servo(pca.channels[channel_num])
 
-# Time when the last outer corner; direction and inner corner were detected or changed.
-last_outer_corner_detection_time = time.time()
-last_change_direction_time = time.time()
-last_inner_corner_detection_time = time.time()
-rotating = 0 
-pub_ = None
-# Sensor regions
-regions_ = {
-        'bright': 0,
-        'right': 0,
-        'fright': 0,
-        'front': 0,
-        'left': 0,
-}
-last_kinds_of_wall=[0, 0, 0, 0, 0]
-index = 0
+#momo.Servo_Motor_Initialization()
+#momo.Motor_Start(pca)
+#servo7.angle = 75.25
+#momo.Motor_Speed(pca,0.25)
+# Set up pygame and the display
+#os.putenv('SDL_FBDEV', '/dev/fb1')
+#pygame.init()
+#lcd = pygame.display.set_mode((320,240))
+#pygame.mouse.set_visible(False)
+#lcd.fill((0,0,0))
+#pygame.display.update()
 
-state_outer_inner=[0, 0, 0, 0]
-index_state_outer_inner = 0
+# Setup the RPLidar
+PORT_NAME = '/dev/ttyUSB0'
+lidar = RPLidar(None, PORT_NAME,timeout=3)
+systime = time.time()
+delay = time.time()
+# used to scale data to fit on the screen
+#max_distance = 0
+turning = False
+doneturn = False
+turnAngle = 77
+isThreading = False
+steerError = 0
+thread = 0
+#pylint: disable=redefined-outer-name,global-statement
+img_result = queue.Queue()
 
-bool_outer_corner = 0
-bool_inner_corner =0
+servo7.angle = 180
+time.sleep(1)
+servo7.angle = 0
+time.sleep(1)
+servo7.angle = turnAngle
+time.sleep(1)
+#cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 80)
+import motorControl as momo
 
-last_vel = [random.uniform(0.1,0.3),  random.uniform(-0.3,0.3)]
-wall_found =0
+momo.Motor_Speed(pca,0.175)
 
-#Robot state machines
-state_ = 0
-state_dict_ = {
-    0: 'random wandering',
-    1: 'following wall',
-    2: 'rotating'
-}
-
-def clbk_laser(msg):
-    """
-    Read sensor messagens, and determine distance to each region. 
-    Manipulates the values measured by the sensor.
-    Callback function for the subscription to the published Laser Scan values.
-    """
-    global regions_, e, angle_min, dist_front, diff_e, direction, bool_outer_corner, bool_inner_corner, index, last_kinds_of_wall
-    size = len(msg.ranges)
-    min_index = size*(direction+1)/4
-    max_index = size*(direction+3)/4
+def trackpavementangle(img_result):
     
-    # Determine values for PD control of distance and P control of angle
-    for i in range(min_index, max_index):
-        if msg.ranges[i] < msg.ranges[min_index] and msg.ranges[i] > 0.01:
-            min_index = i
-    angle_min = (min_index-size/2)*msg.angle_increment
-    dist_min = msg.ranges[min_index]
-    dist_front = msg.ranges[size/2]
-    diff_e = min((dist_min - wall_dist) - e, 100)
-    e = min(dist_min - wall_dist, 100)
-
-    # Determination of minimum distances in each region
-    regions_ = {
-        'bright':  min(min(msg.ranges[0:143]), inf),
-        'right': min(min(msg.ranges[144:287]), inf),
-        'fright':  min(min(msg.ranges[288:431]), inf),
-        'front':  min(min(msg.ranges[432:575]), inf),
-        'fleft':   min(min(msg.ranges[576:719]), inf),
-        'left':   min(min(msg.ranges[720:863]), inf),
-        'bleft':   min(min(msg.ranges[864:1007]), inf),
-    }
-    #rospy.loginfo(regions_)
-
-    # Detection of Outer and Inner corner
-    bool_outer_corner = is_outer_corner()
-    bool_inner_corner = is_inner_corner()
-    if bool_outer_corner == 0 and bool_inner_corner == 0:
-        last_kinds_of_wall[index]=0
+    try:
+        #cap.release()
+        cap = cv2.VideoCapture('/dev/video0',cv2.CAP_V4L)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        #if not cap.isOpened():
+          #  print("camera not open")
+        #else:
+           # print("camera opened")
+        #time.sleep(3)
+        while True:
+            #print("reading camera")
+            #global doneturn
+            ret, img = cap.read()
+           # print(f'ret: {ret} img: {img}')
+            #cap.release()
+            #print("camera read")
+            #if not img:
+              #  print("no image")
+              #  continue
+            dim = img.shape
+            rows = dim[0]
+            columns = dim[1]
+            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            #(hue,sat,value)
+            #if not doneturn:
+                #print("original mask")
+            #lower_thresh = np.array([30,100,95])
+            #upper_thresh = np.array([100,255,225])
+            #else:
+                #print("post turn mask")
+            lower_thresh = np.array([30,44,95])
+            upper_thresh = np.array([100,255,225])
+            mask = cv2.inRange(hsv, lower_thresh, upper_thresh)
+            cv2.imwrite('Cameratester.png',img)
+            cv2.imwrite('CameratestMask.png',mask)
+            moments = cv2.moments(mask)
     
-    # Indexing for last five pattern detection
-    # This is latter used for low pass filtering of the patterns
-    index = index + 1 #5 samples recorded to asses if we are at the corner or not
-    if index == len(last_kinds_of_wall):
-        index = 0
-        
-    take_action()
+            if int(moments['m00']) == 0:
+                #pavement not seen
+                center = None
+                img_result.put(0)
+                print('not seeing pavement')
+            else:
+                cx = int(moments['m10']/moments['m00'])
+                cy = int(moments['m01']/moments['m00'])
+                error = 320 - cx
+                print(error)
+                if error > 70:
+                    #steer needs to be smaller angle
+                    img_result.put(-10)
+                elif error < -70:
+                    #steern need to the larger angle
+                    img_result.put(10) 
+                else:
+                    img_result.put(0)
 
-def change_state(state):
-    """
-    Update machine state
-    """
-    global state_, state_dict_
-    if state is not state_:
-        #print 'Wall follower - [%s] - %s' % (state, state_dict_[state])
-        state_ = state
+    except KeyboardInterrupt:
+        cap.release()
+        #print("camera released")
 
-def take_action():
-    """
-    Change state for the machine states in accordance with the active and inactive regions of the sensor.
-            State 0 No wall found - all regions infinite - Random Wandering
-            State 1 Wall found - Following Wall
-            State 2 Pattern sequence reached - Rotating
-    """
-    global regions_, index, last_kinds_of_wall, index_state_outer_inner, state_outer_inner, loop_index, loop_index_outer_corner
+def process_data(data):
+    #global max_distance
+    #lcd.fill((0,0,0))
+    global systime
+    global turning
+    global doneturn
+    global turnAngle
+    global isThreading
+    global steerError
+    global thread
+
+    #Steering Control###
+    servo7.angle = turnAngle
+    if not isThreading:
+        thread  = threading.Thread(target = trackpavementangle, args = (img_result,))
+        thread.start()
+        isThreading = True
+    #if thread.is_alive():
+        #x = 1
+        #print("waiting for image")
+    #else:
+    if not img_result.empty():
+        #print("image proccessed")
+        #thread.join()
+        steerError = img_result.get()
+        #print(f'steerError: {steerError}')
+        if not turning:
+            turnAngle = turnAngle + steerError
+            if turnAngle < 67:
+                turnAngle = 67
+            elif turnAngle > 82:
+                turnAngle = 82
+        #isThreading = False
+        #print(f'turnangle: {turnAngle}')
+        #momo.Motor_Speed(pca,0.25)
+
+    distance = data[359]
+    turndist = data[115]
+    #print(f'360:{distance}')
+    #print(f'115:{turndist}')
+    #print(data)
+    if distance < 1500 and not turning and not doneturn:                  # ignore initially ungathered data points 
+      if (time.time() - delay) > 3 and distance!=0:
+            print("quick! turn! really fast! get out the way! this is unneccessarily long!")
+            turning = True
+            systime = time.time()
+            turnAngle = 180 
+            doneturn = True
     
-    global wall_dist, max_speed, direction, p, d, angle, dist_min, wall_found, rotating, bool_outer_corner, bool_inner_corner
+    elif distance < 3500 and not turning and (time.time() - delay) > 3 and distance!=0:
+        print("angle reset to 77")
+        turnAngle = 77
 
-    regions = regions_
-    msg = Twist()
-    linear_x = 0
-    angular_z = 0
+    if turning and ((time.time()-systime)>0.6): #and turndist < 2500: #distance : #and ((time.time() - systime) > 1.15):
+        print("Stop Turning!")
+        turning = False
+        turnAngle = 77
+        momo.Motor_Speed(pca,0.155)
 
-    state_description = ''
+    #if ((time.time()-systime)>4):
+    #    print("extra angle")
+    #    servo7.angle = 77
 
-    # Patterns for rotating
-    rotate_sequence_V1 = ['I', 'C', 'C', 'C']
-    rotate_sequence_V2 = [0, 'C', 'C', 'C']
-    rotate_sequence_W = ['I', 'C', 'I', 'C']
+scan_data = [0]*360
 
-    if rotating == 1:
-        state_description = 'case 2 - rotating'
-        change_state(2)
-        if(regions['left'] < wall_dist or regions['right'] < wall_dist):
-            rotating = 0
-    elif regions['fright'] == inf and regions['front'] == inf and regions['right'] == inf and regions['bright'] == inf and regions['fleft'] == inf and regions['left'] == inf and regions['bleft'] == inf:
-        state_description = 'case 0 - random wandering'
-        change_state(0)
-    elif (loop_index == loop_index_outer_corner) and (rotate_sequence_V1 == state_outer_inner or rotate_sequence_V2 == state_outer_inner or rotate_sequence_W == state_outer_inner):
-        state_description = 'case 2 - rotating'
-        change_direction()
-        state_outer_inner = [ 0, 0,  0, 'C']
-        change_state(2)
-    else:
-        state_description = 'case 1 - following wall'
-        change_state(1)
-
-def random_wandering():
-    """
-    This function defines the linear.x and angular.z velocities for the random wandering of the robot.
-    Returns:
-            Twist(): msg with angular and linear velocities to be published
-                    msg.linear.x -> [0.1, 0.3]
-                    msg.angular.z -> [-1, 1]
-    """
-    global direction, last_vel
-    msg = Twist()
-    msg.linear.x = max(min( last_vel[0] + random.uniform(-0.01,0.01),0.3),0.1)
-    msg.angular.z= max(min( last_vel[1] + random.uniform(-0.1,0.1),1),-1)
-    if msg.angular.z == 1 or msg.angular.z == -1:
-        msg.angular.z = 0
-    last_vel[0] = msg.linear.x
-    last_vel[1] = msg.angular.z
-    return msg
-
-def following_wall():
-    """
-    PD control for the wall following state. 
-    Returns:
-            Twist(): msg with angular and linear velocities to be published
-                    msg.linear.x -> 0; 0.5max_speed; 0.4max_speed
-                    msg.angular.z -> PD controller response
-    """
-    global wall_dist, max_speed, direction, p, d, angle, dist_min, dist_front, e, diff_e, angle_min
-    msg = Twist()
-    if dist_front < wall_dist:
-        msg.linear.x = 0
-    elif dist_front < wall_dist*2:
-        msg.linear.x = 0.5*max_speed
-    elif abs(angle_min) > 1.75:
-        msg.linear.x = 0.4*max_speed
-    else:
-        msg.linear.x = max_speed
-    msg.angular.z = max(min(direction*(p*e+d*diff_e) + angle*(angle_min-((math.pi)/2)*direction), 2.5), -2.5)
-    #print 'Turn Left angular z, linear x %f - %f' % (msg.angular.z, msg.linear.x)
-    return msg
-
-def change_direction():
-    """
-    Toggle direction in which the robot will follow the wall
-        1 for wall on the left side of the robot and -1 for the right side
-    """
-    global direction, last_change_direction, rotating
-    print 'Change direction!'
-    elapsed_time = time.time() - last_change_direction_time # Elapsed time since last change direction
-    if elapsed_time >= 20:
-        last_change_direction = time.time()
-        direction = -direction # Wall in the other side now
-        rotating = 1
-
-def rotating():
-    """
-    Rotation movement of the robot. 
-    Returns:
-            Twist(): msg with angular and linear velocities to be published
-                    msg.linear.x -> 0m/s
-                    msg.angular.z -> -2 or +2 rad/s
-    """
-    global direction
-    msg = Twist()
-    msg.linear.x = 0
-    msg.angular.z = direction*2
-    return msg
-
-
-def is_outer_corner():
-    """
-    Assessment of outer corner in the wall. 
-    If all the regions except for one of the back regions are infinite then we are in the presence of a possible corner.
-    If all the elements in last_kinds_of_wall are 'C' and the last time a real corner was detected is superior or equal to 30 seconds:
-        To state_outer_inner a 'C' is appended and 
-        The time is restart.
-    Returns:
-            bool_outer_corner: 0 if it is not a outer corner; 1 if it is a outer corner
-    """
-    global regions_, last_kinds_of_wall, last_outer_corner_detection_time, index, state_outer_inner, index_state_outer_inner, loop_index, loop_index_outer_corner
-    regions = regions_
-    bool_outer_corner = 0
-    if (regions['fright'] == inf and regions['front'] == inf and regions['right'] == inf and regions['bright'] < inf  and regions['left'] == inf and regions['bleft'] == inf and regions['fleft'] == inf) or (regions['bleft'] < inf and regions['fleft'] == inf and regions['front'] == inf and regions['left'] == inf and regions['right'] == inf and regions['bright'] == inf and regions['fright'] == inf):
-        bool_outer_corner = 1 # It is a corner
-        last_kinds_of_wall[index]='C'
-        elapsed_time = time.time() - last_outer_corner_detection_time # Elapsed time since last corner detection
-        if last_kinds_of_wall.count('C') == len(last_kinds_of_wall) and elapsed_time >= 30:
-            last_outer_corner_detection_time = time.time()
-            loop_index_outer_corner = loop_index
-            state_outer_inner = state_outer_inner[1:]
-            state_outer_inner.append('C')
-            print 'It is a outer corner'
-    return bool_outer_corner
-
-def is_inner_corner():
-    """
-    Assessment of inner corner in the wall. 
-    If the three front regions are inferior than the wall_dist.
-    If all the elements in last_kinds_of_wall are 'I' and the last time a real corner was detected is superior or equal to 20 seconds:
-        To state_outer_inner a 'I' is appended and 
-        The time is restart.
-    Returns:
-            bool_inner_corner: 0 if it is not a inner corner; 1 if it is a inner corner
-    """
-    global regions_, wall_dist, last_kinds_of_wall, last_inner_corner_detection_time, index, state_outer_inner, index_state_outer_inner, loop_index_inner_corner, loop_index
-    regions = regions_
-    bool_inner_corner = 0
-    if regions['fright'] < wall_dist and regions['front'] < wall_dist and regions['fleft'] < wall_dist:
-        bool_inner_corner = 1
-        last_kinds_of_wall[index]='I'
-        elapsed_time = time.time() - last_inner_corner_detection_time # Elapsed time since last corner detection
-        if last_kinds_of_wall.count('I') == len(last_kinds_of_wall) and elapsed_time >= 20:
-            last_inner_corner_detection_time = time.time()
-            loop_index_inner_corner = loop_index
-            state_outer_inner = state_outer_inner[1:]
-            state_outer_inner.append('I')
-            print 'It is a inner corner'
-    return bool_inner_corner
-
-def main():
-    global pub_, active_, hz, loop_index
-    
-    rospy.init_node('reading_laser')
-    
-    pub_ = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-    
-    sub = rospy.Subscriber('/m2wr/laser/scan', LaserScan, clbk_laser)
-    
-    print 'Code is running'
-    rate = rospy.Rate(hz)
-    while not rospy.is_shutdown():
-        loop_index = loop_index + 1
-        msg = Twist()
-
-        # State Dispatcher
-        if state_ == 0:
-            msg = random_wandering()
-        elif state_ == 1:
-            msg = following_wall()
-        elif state_ == 2:
-            msg = rotating()
-        else:
-            rospy.logerr('Unknown state!')
-        
-        pub_.publish(msg)
-        
-        rate.sleep()
-
-if __name__ == '__main__':
-    main()
+try:
+    print(lidar.info)
+    for scan in lidar.iter_scans():
+        for (_, angle, distance) in scan:
+            scan_data[min([359, floor(angle)])] = distance
+            process_data(scan_data)
+        #print(distance)
+            #print(f'angle: {angle}')
+except KeyboardInterrupt:
+    print('Stoping.')
+    momo.Motor_Speed(pca,0)
+    img_result.queue.clear()
+lidar.stop()
+lidar.disconnect()
