@@ -27,8 +27,8 @@ IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
 fps = 0
 
-hsv_min = np.array((0, 0, 255))
-hsv_max = np.array((0, 255, 255))
+hsv_min = np.array((50, 80, 80))
+hsv_max = np.array((120, 255, 255))
 
 colors = []
 
