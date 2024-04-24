@@ -195,14 +195,14 @@ if __name__ == "__main__":
     pca = Servo_Motor_Initialization()
     Motor_Start(pca)
     
-    if i == 0:
-        Motor_Speed(pca, 0) 
-        servo7.angle = 120
-        time.sleep(1)
-        Motor_Speed(pca, -0.5) 
-        servo7.angle = 120
-        time.sleep(1)
-        i += 1    
+#    if i == 0:
+#        Motor_Speed(pca, 0) 
+#        servo7.angle = 120
+#        time.sleep(1)
+#        Motor_Speed(pca, -0.5) 
+#        servo7.angle = 120
+#        time.sleep(1)
+#        i += 1    
 
 
     try:
