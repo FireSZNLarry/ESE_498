@@ -272,10 +272,23 @@ if __name__ == "__main__":
                         Motor_Speed(pca, 0.15) 
                         servo7.angle = 70
                         time.sleep(0.1)
+                        Motor_Speed(pca, 0) 
+                        servo7.angle = 120
+                        time.sleep(0.1)
+                        Motor_Speed(pca, -0.15) 
+                        servo7.angle = 120
+                        time.sleep(0.1)
+
                     else:
                         print("none")
                         Motor_Speed(pca, 0.15)
                         servo7.angle = 70
+                        time.sleep(0.1)
+                        Motor_Speed(pca, 0) 
+                        servo7.angle = 120
+                        time.sleep(0.1)
+                        Motor_Speed(pca, -0.15) 
+                        servo7.angle = 120
                         time.sleep(0.1)
                 elif cx>120:
                     if cx<310:
@@ -289,15 +302,33 @@ if __name__ == "__main__":
                             Motor_Speed(pca, 0.15)
                             servo7.angle = 120
                             time.sleep(0.1)
+                            Motor_Speed(pca, 0) 
+                            servo7.angle = 70
+                            time.sleep(0.1)
+                            Motor_Speed(pca, -0.15) 
+                            servo7.angle = 70
+                            time.sleep(0.1)
                     else:
                         print("none")
                         Motor_Speed(pca, 0.15)
                         servo7.angle = 70
                         time.sleep(0.1)
+                        Motor_Speed(pca, 0) 
+                        servo7.angle = 120
+                        time.sleep(0.1)
+                        Motor_Speed(pca, -0.15) 
+                        servo7.angle = 120
+                        time.sleep(0.1)
             else:
                 print("DNR")
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 70
+                time.sleep(0.1)
+                Motor_Speed(pca, 0) 
+                servo7.angle = 120
+                time.sleep(0.1)
+                Motor_Speed(pca, -0.15) 
+                servo7.angle = 120
                 time.sleep(0.1)
                 
             ##
