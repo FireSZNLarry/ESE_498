@@ -274,105 +274,32 @@ if __name__ == "__main__":
                         time.sleep(0.1)
                     else:
                         print("none")
-                        if i == 0:
-                            Motor_Speed(pca, 0)
-                            time.sleep(0.1)
-                            i += 1
-                        else:
-                            if i < 5:
-                                Motor_Speed(pca, -0.15)
-                                servo7.angle = 120
-                                time.sleep(0.1)
-                                i += 1
-                                if i == 4:
-                                    Motor_Speed(pca, 0)
-                                    time.sleep(0.1)
-                                    i += 1
-                            else:
-                                Motor_Speed(pca, 0.15)
-                                servo7.angle = 70
-                                time.sleep(0.1)
-                                i += 1
-                                if i == 10:
-                                    i = 1
-                                    Motor_Speed(pca, 0)
-                                    time.sleep(0.1)
-
-
-
+                        Motor_Speed(pca, 0.15)
+                        servo7.angle = 70
+                        time.sleep(0.1)
                 elif cx>120:
                     if cx<310:
                         if cx<220:
                             print("center")
                             Motor_Speed(pca, 0)  
-                            servo7.angle = 93
+                            servo7.angle = 95
                             time.sleep(0.1)
                         else:
                             print("left")
-                            Motor_Speed(pca, 0.15) 
-                            #servo7.angle = 50
+                            Motor_Speed(pca, 0.15)
                             servo7.angle = 120
                             time.sleep(0.1)
                     else:
                         print("none")
-                        if i == 0:
-                            Motor_Speed(pca, 0)
-                            time.sleep(0.1)
-                            i += 1
-                        else:
-                            if i < 5:
-                                Motor_Speed(pca, -0.15)
-                                servo7.angle = 120
-                                time.sleep(0.1)
-                                i += 1
-                                if i == 4:
-                                    Motor_Speed(pca, 0)
-                                    time.sleep(0.1)
-                                    i += 1
-                            else:
-                                Motor_Speed(pca, 0.15)
-                                servo7.angle = 70
-                                time.sleep(0.1)
-                                i += 1
-                                if i == 10:
-                                    i = 1
-                                    Motor_Speed(pca, 0)
-                                    time.sleep(0.1) 
+                        Motor_Speed(pca, 0.15)
+                        servo7.angle = 70
+                        time.sleep(0.1)
             else:
                 print("DNR")
-                if i == 0:
-                    Motor_Speed(pca, 0)
-                    time.sleep(0.1)
-                    i += 1
-                    print("initial")
-                else:
-                    if i < 5:
-                        print(i)
-                        Motor_Speed(pca, 0.15)
-                        servo7.angle = 120
-                        time.sleep(0.1)
-                        i += 1
-                        print("forward")
-                        if i == 5:
-                            print(i)
-                            Motor_Speed(pca, 0)
-                            time.sleep(0.1)
-                            i += 1
-                            print("zero before reverse")
-                    else:
-                        print(i)
-                        Motor_Speed(pca, -1)
-                        print("m=-1")
-                        servo7.angle = 70
-                        time.sleep(0.4)
-                        i += 1
-                        print("reverse")
-                        if i == 10:
-                            print(i)
-                            i = 0
-                            Motor_Speed(pca, 0)
-                            time.sleep(0.1)
-                            print("reset") 
+                Motor_Speed(pca, 0.15)
+                servo7.angle = 70
+                time.sleep(0.1)
+                
             ##
             
             
