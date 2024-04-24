@@ -21,17 +21,51 @@
 import cv2
 import numpy as np
 import time
+from time import sleep
+import math
+from board import SCL,SDA
+import busio
+from adafruit_motor import servo
+from adafruit_pca9685 import PCA9685
+
+import os
+from math import cos, sin, pi, floor
+import pygame
+from adafruit_rplidar import RPLidar
+
+#from picamera import PiCamera
+import threading
+import queue
 
 CAMERA_DEVICE_ID = 0
 IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
 fps = 0
 
-hsv_min = np.array((80, 80, 80))
-hsv_max = np.array((120, 255, 255))
+hsv_min = np.array((70, 80, 80))
+hsv_max = np.array((100, 255, 255))
 
 colors = []
+i = 0
 
+
+i2c = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c)
+pca.frequency = 100
+channel_num = 14
+servo7 = servo.Servo(pca.channels[channel_num])
+#for i in range(180):
+#    servo7.angle = i
+#    time.sleep(0.03)
+#for i in range(180):
+#    servo7.angle = 180 - i
+#    time.sleep(0.03)
+#print("hi")
+    
+    
+    
+    
+    
 
 def isset(v):
     try:
@@ -50,14 +84,14 @@ def on_mouse_click(event, x, y, flags, frame):
         color_rgb = tuple(reversed(color_bgr))
         #frame[y,x].tolist()
 
-        print(color_rgb)
+       # print(color_rgb)
 
         color_hsv = rgb2hsv(color_rgb[0], color_rgb[1], color_rgb[2])
-        print(color_hsv)
+        #print(color_hsv)
 
         colors.append(color_hsv)
 
-        print(colors)
+        #print(colors)
 
 
 # R, G, B values are [0, 255]. 
@@ -133,6 +167,35 @@ def visualize_fps(image, fps: int):
 
 
 if __name__ == "__main__":
+    
+        
+    def Servo_Motor_Initialization():
+       i2c_bus = busio.I2C(SCL,SDA)
+       pca = PCA9685(i2c_bus)
+       pca.frequency = 100
+       return pca
+
+    def Motor_Start(pca):
+       x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
+       #Motor_Speed(pca, 0.1)
+       time.sleep(2)
+       y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
+       #Motor_Speed(pca, -0.1)
+       time.sleep(2)
+       z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
+   
+
+    def Motor_Speed(pca,percent):
+       #converts a -1 to 1 value to 16-bit duty cycle
+       speed = ((percent) * 3277) + 65535 * 0.15
+       pca.channels[15].duty_cycle = math.floor(speed)
+       #print(speed/65535)
+       
+    #initialization
+    pca = Servo_Motor_Initialization()
+    Motor_Start(pca)
+
+
     try:
         # create video capture
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
@@ -142,6 +205,7 @@ if __name__ == "__main__":
         cap.set(4, IMAGE_HEIGHT)
 
         while True:
+
             # ----------------------------------------------------------------------
             # record start time
             start_time = time.time()
@@ -154,9 +218,8 @@ if __name__ == "__main__":
 
             # Convert the image to hsv space and find range of colors
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            cv2.namedWindow('frame')
-            cv2.setMouseCallback('frame', on_mouse_click, frame)
-
+            #cv2.namedWindow('frame')
+            #cv2.setMouseCallback('frame', on_mouse_click, frame)
             # Uncomment this for RED tag
             # thresh = cv2.inRange(hsv,np.array((120, 80, 80)), np.array((180, 255, 255)))
 
@@ -170,13 +233,14 @@ if __name__ == "__main__":
                 maxs = max(c[1] for c in colors)
                 maxv = max(c[2] for c in colors)
 
-                print("New HSV threshold: ", (minh, mins, minv), (maxh, maxs, maxv))
+                #print("New HSV threshold: ", (minh, mins, minv), (maxh, maxs, maxv))
                 hsv_min = np.array((minh, mins, minv))
                 hsv_max = np.array((maxh, maxs, maxv))
+                
 
             thresh = cv2.inRange(hsv, hsv_min, hsv_max)
             thresh2 = thresh.copy()
-
+            
             # find contours in the threshold image
             (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
             #print(major_ver, minor_ver, subminor_ver)
@@ -194,27 +258,138 @@ if __name__ == "__main__":
                 if area > max_area:
                     max_area = area
                     best_cnt = cnt
-
+                    
+            
             # finding centroids of best_cnt and draw a circle there
             if isset('best_cnt'):
                 M = cv2.moments(best_cnt)
                 cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
-                cv2.circle(frame,(cx,cy),5,255,-1)
-                print("Central pos: (%d, %d)" % (cx,cy))
+                cv2.circle(frame,(cx,cy),20,255,-1) #size of dot, size of window, 
+                #print("Central pos: (%d, %d)" % (cx,cy))
+                if cx<120:
+                    if cx>10:
+                        print("right")
+                        Motor_Speed(pca, 0.15) 
+                        servo7.angle = 70
+                        time.sleep(0.1)
+                    else:
+                        print("none")
+                        if i == 0:
+                            Motor_Speed(pca, 0)
+                            time.sleep(0.1)
+                            i += 1
+                        else:
+                            if i < 5:
+                                Motor_Speed(pca, -0.15)
+                                servo7.angle = 120
+                                time.sleep(0.1)
+                                i += 1
+                                if i == 4:
+                                    Motor_Speed(pca, 0)
+                                    time.sleep(0.1)
+                                    i += 1
+                            else:
+                                Motor_Speed(pca, 0.15)
+                                servo7.angle = 70
+                                time.sleep(0.1)
+                                i += 1
+                                if i == 10:
+                                    i = 1
+                                    Motor_Speed(pca, 0)
+                                    time.sleep(0.1)
+
+
+
+                elif cx>120:
+                    if cx<310:
+                        if cx<220:
+                            print("center")
+                            Motor_Speed(pca, 0)  
+                            servo7.angle = 93
+                            time.sleep(0.1)
+                        else:
+                            print("left")
+                            Motor_Speed(pca, 0.15) 
+                            #servo7.angle = 50
+                            servo7.angle = 120
+                            time.sleep(0.1)
+                    else:
+                        print("none")
+                        if i == 0:
+                            Motor_Speed(pca, 0)
+                            time.sleep(0.1)
+                            i += 1
+                        else:
+                            if i < 5:
+                                Motor_Speed(pca, -0.15)
+                                servo7.angle = 120
+                                time.sleep(0.1)
+                                i += 1
+                                if i == 4:
+                                    Motor_Speed(pca, 0)
+                                    time.sleep(0.1)
+                                    i += 1
+                            else:
+                                Motor_Speed(pca, 0.15)
+                                servo7.angle = 70
+                                time.sleep(0.1)
+                                i += 1
+                                if i == 10:
+                                    i = 1
+                                    Motor_Speed(pca, 0)
+                                    time.sleep(0.1) 
             else:
-                print("[Warning]Tag lost...")
+                print("DNR")
+                if i == 0:
+                    Motor_Speed(pca, 0)
+                    time.sleep(0.1)
+                    i += 1
+                    print("initial")
+                else:
+                    if i < 5:
+                        print(i)
+                        Motor_Speed(pca, 0.15)
+                        servo7.angle = 120
+                        time.sleep(0.1)
+                        i += 1
+                        print("forward")
+                        if i == 5:
+                            print(i)
+                            Motor_Speed(pca, 0)
+                            time.sleep(0.1)
+                            i += 1
+                            print("zero before reverse")
+                    else:
+                        print(i)
+                        Motor_Speed(pca, -1)
+                        print("m=-1")
+                        servo7.angle = 70
+                        time.sleep(0.4)
+                        i += 1
+                        print("reverse")
+                        if i == 10:
+                            print(i)
+                            i = 0
+                            Motor_Speed(pca, 0)
+                            time.sleep(0.1)
+                            print("reset") 
+            ##
+            
+            
+
+           
 
             # Show the original and processed image
             #res = cv2.bitwise_and(frame, frame, mask=thresh2)
-            cv2.imshow('frame', visualize_fps(frame, fps))
-            cv2.imshow('thresh', visualize_fps(thresh2, fps))
+            #cv2.imshow('frame', visualize_fps(frame, fps))
+            #cv2.imshow('thresh', visualize_fps(thresh2, fps))
             # ----------------------------------------------------------------------
             # record end time
             end_time = time.time()
             # calculate FPS
             seconds = end_time - start_time
             fps = 1.0 / seconds
-            print("Estimated fps:{0:0.1f}".format(fps));
+            #print("Estimated fps:{0:0.1f}".format(fps));
             # if key pressed is 'Esc' then exit the loop
             if cv2.waitKey(33) == 27:
                 break
