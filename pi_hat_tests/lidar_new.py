@@ -102,7 +102,7 @@ try:
         update_motor_speed(speed)
 
         # Steering control based on error
-        steering_angle = 90 + (error / distance_tolerance) * turn_sensitivity
+        steering_angle = 10 + (error / distance_tolerance) * turn_sensitivity
         update_steering_angle(steering_angle)
 
         # Update pygame display with LIDAR data
