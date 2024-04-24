@@ -194,6 +194,15 @@ if __name__ == "__main__":
     #initialization
     pca = Servo_Motor_Initialization()
     Motor_Start(pca)
+    
+    
+    Motor_Speed(pca, 0) 
+    servo7.angle = 120
+    time.sleep(3)
+    Motor_Speed(pca, -0.5) 
+    servo7.angle = 120
+    time.sleep(10)
+            
 
 
     try:
@@ -260,12 +269,6 @@ if __name__ == "__main__":
                     best_cnt = cnt
                     
                     
-            Motor_Speed(pca, 0) 
-            servo7.angle = 120
-            time.sleep(3)
-            Motor_Speed(pca, -0.3) 
-            servo7.angle = 120
-            time.sleep(10)
             
             # finding centroids of best_cnt and draw a circle there
             if isset('best_cnt'):
