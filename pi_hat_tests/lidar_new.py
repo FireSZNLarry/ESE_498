@@ -7,7 +7,9 @@ from math import cos, sin, pi, floor
 from board import SCL, SDA
 from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
+import cv2
 from adafruit_rplidar import RPLidar
+import numpy as np
 
 # Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
