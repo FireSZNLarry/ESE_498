@@ -77,7 +77,7 @@ def process_data(data):
     pygame.display.update()
 
 
-scan_data = [0]*360
+scan_data = [0]*900
 
 try:
     print(lidar.info)
