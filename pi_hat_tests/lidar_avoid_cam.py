@@ -90,7 +90,11 @@ try:
     while i == 0:
         scan_data = [0]*360
         for scan in lidar.iter_scans():
+            if i > 0:
+                break
             for (_, angle, distance) in scan:
+                if i > 0:
+                    break
                 scan_data[min([359, math.floor(angle)])] = distance
             
             # Frontal distance
@@ -113,7 +117,7 @@ try:
                 i = 2
                 #servo7.angle = 93
                 break
-
+        
             # Update pygame display with LIDAR data
             #lcd.fill((0, 0, 0))
             for angle in range(360):
