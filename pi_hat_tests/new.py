@@ -25,7 +25,7 @@ pygame.display.update()
 
 # LIDAR setup
 PORT_NAME = '/dev/ttyUSB0'
-lidar = RPLidar(None, PORT_NAME, timeout=3)
+lidar = RPLidar(None, PORT_NAME, timeout=100)
 
 # Motor and Servo setup
 i2c_bus = busio.I2C(SCL, SDA)
@@ -37,10 +37,6 @@ steering_channel = 14
 servo_steering = servo.Servo(pca.channels[steering_channel])
 motor = pca.channels[motor_channel]
 
-# Helper function to update motor speed
-def update_motor_speed(speed):
-    pwm_value = int((speed * 32767) + 32767)
-    motor.duty_cycle = pwm_value
 
 # Helper function to update steering angle
 def update_steering_angle(angle):
@@ -51,11 +47,6 @@ def scale_lidar_distance(distance, max_distance=100000):
     return min(distance, max_distance) / max_distance
     print(distance)
 
-# Control parameters for centering in a room or corridor
-desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
-distance_tolerance = 100  # mm tolerance for distance maintenance
-max_speed = 0.5
-turn_sensitivity = 10  # Higher sensitivity in turning
 
 
 
