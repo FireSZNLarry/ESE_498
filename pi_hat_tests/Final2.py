@@ -41,7 +41,7 @@ max_distance = 0
 def process_data(data):
     global max_distance
     lcd.fill((0,0,0))
-    for angle in range(360):
+    for angle in range(60):
         distance = data[angle]
         if distance > 0:                  # ignore initially ungathered data points
             max_distance = max([min([5000, distance]), max_distance])
