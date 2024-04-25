@@ -66,12 +66,15 @@ for scan in lidar.iter_scans():
         if 80 <= angle < 200:
             scan_data[angle] = distance
             if distance < 500:
+                print(distance)
                 update_steering_angle(70)
                 time.sleep(0.1)
             elif distance < 1000:
+                print(distance)
                 update_steering_angle(130)
                 time.sleep(0.1)
             else:
+                print(distance)
                 update_steering_angle(90)
                 time.sleep(0.1)
                
