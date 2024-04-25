@@ -33,7 +33,7 @@ motor = pca.channels[motor_channel]
 # Function to update motor speed
 def update_motor_speed(speed):
     pwm_value = int((speed * 32767) + 32767)
-    motor.duty_cycle = pwm_value
+    motor.duty_cycle = 0.5
     
 # Function to update steering angle
 def update_steering_angle(angle):
