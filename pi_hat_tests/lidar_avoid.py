@@ -75,7 +75,7 @@ try:
                 update_steering_angle(0)
 
             # Update pygame display with LIDAR data
-            lcd.fill((0, 0, 0))
+            #lcd.fill((0, 0, 0))
             for angle in range(360):
                 distance = scan_data[angle]
                 if distance:
