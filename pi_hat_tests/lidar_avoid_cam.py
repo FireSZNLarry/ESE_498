@@ -58,14 +58,14 @@ def Servo_Motor_Initialization():
     pca.frequency = 100
     return pca
 
-def Motor_Start(pca):
-    x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
+#def Motor_Start(pca):
+ #   x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
     #Motor_Speed(pca, 0.1)
-    time.sleep(2)
-    y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
+  #  time.sleep(2)
+   # y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
     #Motor_Speed(pca, -0.1)
-    time.sleep(2)
-    z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
+    #time.sleep(2)
+    #z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
    
 
 def Motor_Speed(pca,percent):
@@ -98,15 +98,15 @@ try:
             # Check distances and react
             if front_distance < backup_distance:
                 # Too close, back up and turn
-                Motor_Speed(pwm, -0.15) 
+                Motor_Speed(pca, -0.15) 
                 update_steering_angle(turn_angle) #-
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
-                Motor_Speed(pwm, 0.15) 
+                Motor_Speed(pca, 0.15) 
                 update_steering_angle(turn_angle)
             else:
                 # Safe distance, move forward
-                Motor_Speed(pwm, 0.15) 
+                Motor_Speed(pca, 0.15) 
                 update_steering_angle(0)
 
             # Update pygame display with LIDAR data
