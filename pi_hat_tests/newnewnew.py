@@ -29,6 +29,15 @@ from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
 
 
+# Set up pygame and the display
+os.putenv('SDL_FBDEV', '/dev/fb1')
+pygame.init()
+lcd = pygame.display.set_mode((320,240))
+pygame.mouse.set_visible(False)
+lcd.fill((0,0,0))
+pygame.display.update()
+
+
 i2c_bus = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c_bus)
 pca.frequency = 100
@@ -42,8 +51,6 @@ motor = pca.channels[motor_channel]
 PORT_NAME = '/dev/ttyUSB0'
 lidar = RPLidar(None, PORT_NAME,timeout=100)
 
-# used to scale data to fit on the screen
-max_distance = 0
 
 def update_steering_angle(angle):
     servo_steering.angle = angle
