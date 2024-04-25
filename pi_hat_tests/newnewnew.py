@@ -60,7 +60,7 @@ def update_steering_angle(angle):
 scan_data = [0]*360
 
 try:
-    print(lidar.info)
+    #print(lidar.info)
     for scan in lidar.iter_scans():
         for (_, angle, distance) in scan:
             scan_data[min([359, floor(angle)])] = distance
