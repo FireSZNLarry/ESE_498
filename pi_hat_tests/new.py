@@ -68,13 +68,13 @@ def main():
                     if 80 <= angle < 200:
                         scan_data[angle] = distance
                         if distance < 500:
-                            servo7.angle(70)
+                            supdate_steering_angle(70)
                             time.sleep(0.1)
                         elif distance < 1000:
-                            servo7.angle(130)
+                            update_steering_angle(130)
                             time.sleep(0.1)
                         else:
-                            servo7.angle(90)
+                            update_steering_angle(90)
                             time.sleep(0.1)
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
