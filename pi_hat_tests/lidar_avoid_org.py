@@ -60,7 +60,7 @@ def Motor_Start(pca):
 def Motor_Speed(pca,percent):
    #converts a -1 to 1 value to 16-bit duty cycle
    #speed = ((percent) * 3277) + 65535 * 0.15
-   speed = ((percent) * 0.3) + 6 * 0.15
+   speed = ((percent) * 3) + 6 * 0.15
    pca.channels[15].duty_cycle = math.floor(speed)
    print(speed/65535)
 
