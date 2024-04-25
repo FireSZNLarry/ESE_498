@@ -69,10 +69,13 @@ def main():
                         scan_data[angle] = distance
                         if distance < 500:
                             servo7.angle(70)
+                            time.sleep(0.1)
                         elif distance < 1000:
                             servo7.angle(130)
+                            time.sleep(0.1)
                         else:
                             servo7.angle(90)
+                            time.sleep(0.1)
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
                 right_distance = scan_data[90] or desired_distance_from_wall
