@@ -86,7 +86,7 @@ try:
                 time.sleep(0.1)
         process_data(scan_data)
 
-except KeyboardInterrupt:
-    print('Stoping.')
+except ValueError:
+    pass
 lidar.stop()
 lidar.disconnect()
