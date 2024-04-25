@@ -68,8 +68,8 @@ while True:
                     print(distance)
                     update_steering_angle(90)
                     time.sleep(0.1)
-except KeyboardInterrupt:
-    print('Stoping.')
+    except KeyboardInterrupt:
+        print('Stoping.')
 lidar.stop()
 lidar.disconnect()
 
