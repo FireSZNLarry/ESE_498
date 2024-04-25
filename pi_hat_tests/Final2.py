@@ -83,15 +83,15 @@ def process_data(data):
             x = distance * cos(radians)
             print('x')
             print(x)
-            if x<1000:
-                print('x is less than 1000')
+            if x<500:
+                print('x is less than 500')
                 servo7.angle = 70
                 time.sleep(2)
             y = distance * sin(radians)
             print('y')
             print(y)
-            if y<1000:
-                print('y is less than 1000')
+            if y<500:
+                print('y is less than 500')
                 servo7.angle = 70
                 time.sleep(2)
             point = (160 + int(x / max_distance * 119), 120 + int(y / max_distance * 119))
