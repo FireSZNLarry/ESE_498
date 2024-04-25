@@ -78,7 +78,7 @@ def main():
                 # Adjust steering based on error difference
                 error_difference = left_error - right_error
                 steering_angle = 90 + (error_difference / distance_tolerance) * turn_sensitivity
-                update_steering_angle(steering_angle)
+                update_steering_angle(steering_angle-20)
 
                 # Update visualization
                 lcd.fill((0, 0, 0))
