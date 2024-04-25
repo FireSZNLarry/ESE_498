@@ -105,19 +105,19 @@ try:
                 # Too close, back up and turn
                 
                #update_motor_speed(-max_speed) 
-               Motor_Speed(pca, -0.3)   #reverse
+               Motor_Speed(pca, -0.8)   #reverse
                #update_steering_angle(-turn_angle)
                servo7.angle = 120
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
                 #update_motor_speed(max_speed)
-                Motor_Speed(pca, 0.3)
+                Motor_Speed(pca, 0.8)
                 #update_steering_angle(turn_angle)
                 servo7.angle = 70
             else:
                 # Safe distance, move forward
                 #update_motor_speed(max_speed)
-                Motor_Speed(pca, 0.3)
+                Motor_Speed(pca, 0.8)
                 #update_steering_angle(0)
                 servo7.angle = 95
 
