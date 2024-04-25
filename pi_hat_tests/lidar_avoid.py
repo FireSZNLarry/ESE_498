@@ -47,7 +47,7 @@ def scale_lidar_distance(distance, max_distance=4000):
 safe_distance = 500  # Minimum distance from an obstacle in millimeters
 backup_distance = 300  # Distance indicating too close, needing to back up
 turn_angle = 110  # Angle to turn when avoiding an object 45
-max_speed = 0.2
+max_speed = 0.5
 
 # Main loop with object avoidance
 try:
