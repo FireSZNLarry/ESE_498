@@ -56,6 +56,8 @@ distance_tolerance = 100  # mm tolerance for distance maintenance
 max_speed = 0.5
 turn_sensitivity = 10  # Higher sensitivity in turning
 
+
+
 def main():
     try:
         scan_data = [0]*360
@@ -65,6 +67,12 @@ def main():
                     angle = int(angle)
                     if 80 <= angle < 200:
                         scan_data[angle] = distance
+                        if distance < 500:
+                            servo7.angle(70)
+                        elif distance < 1000:
+                            servo7.angle(130)
+                        else:
+                            servo7.angle(90)
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
                 right_distance = scan_data[90] or desired_distance_from_wall
@@ -82,12 +90,7 @@ def main():
                 update_motor_speed(speed)
 
                 # Adjust steering based on error difference
-                if distance < 500:
-                    servo7.angle(70)
-                elif distance < 1000:
-                    servo7.angle(130)
-                else:
-                    servo7.angle(90)
+               
 
                 # Update visualization
                 lcd.fill((0, 0, 0))
