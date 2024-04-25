@@ -42,21 +42,7 @@ def process_data(data):
     global max_distance
     lcd.fill((0,0,0))
     for angle in range(360):
-        if 120 <= angle < 160:
-            distance = data[angle]
-            if distance < 500:
-                print(distance)
-                update_steering_angle(70)
-                time.sleep(0.1)
-            elif distance < 1000:
-                print(distance)
-                update_steering_angle(130)
-                time.sleep(0.1)
-            else:
-                print(distance)
-                update_steering_angle(90)
-                time.sleep(0.1)
-        
+        distance = data[angle]
         if distance > 0:                  # ignore initially ungathered data points
             max_distance = max([min([5000, distance]), max_distance])
             radians = angle * pi / 180.0
@@ -74,6 +60,19 @@ try:
     for scan in lidar.iter_scans():
         for (_, angle, distance) in scan:
             scan_data[min([359, floor(angle)])] = distance
+            if 120 <= angle < 160:
+                if distance < 500:
+                    print(distance)
+                    update_steering_angle(70)
+                    time.sleep(0.1)
+                elif distance < 1000:
+                    print(distance)
+                    update_steering_angle(130)
+                    time.sleep(0.1)
+                else:
+                    print(distance)
+                    update_steering_angle(90)
+                    time.sleep(0.1)
         process_data(scan_data)
 
 except KeyboardInterrupt:
