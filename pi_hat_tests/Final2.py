@@ -22,6 +22,38 @@ from math import cos, sin, pi, floor
 import pygame
 from adafruit_rplidar import RPLidar
 
+
+
+import cv2
+import numpy as np
+import time
+from time import sleep
+import math
+from board import SCL,SDA
+import busio
+from adafruit_motor import servo
+from adafruit_pca9685 import PCA9685
+
+import os
+from math import cos, sin, pi, floor
+import pygame
+from adafruit_rplidar import RPLidar
+
+#from picamera import PiCamera
+import threading
+import queue
+
+
+
+i2c = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c)
+pca.frequency = 100
+channel_num = 14
+servo7 = servo.Servo(pca.channels[channel_num])
+
+
+
+
 # Set up pygame and the display
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
@@ -53,11 +85,15 @@ def process_data(data):
             print(x)
             if x<1000:
                 print('x is less than 1000')
+                servo7.angle = 70
+                time.sleep(2)
             y = distance * sin(radians)
             print('y')
             print(y)
             if y<1000:
                 print('y is less than 1000')
+                servo7.angle = 70
+                time.sleep(2)
             point = (160 + int(x / max_distance * 119), 120 + int(y / max_distance * 119))
             print('point')
             print(point)
