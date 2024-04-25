@@ -102,14 +102,17 @@ try:
                 # Too close, back up and turn
                 i = 1
                 #servo7.angle = 70
+                break
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
                 i = 2
                 #servo7.angle = 135
+                break
             else:
                 # Safe distance, move forward
                 i = 2
                 #servo7.angle = 93
+                break
 
             # Update pygame display with LIDAR data
             #lcd.fill((0, 0, 0))
