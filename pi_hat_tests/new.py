@@ -25,7 +25,7 @@ pygame.display.update()
 
 # LIDAR setup
 PORT_NAME = '/dev/ttyUSB0'
-lidar = RPLidar(None, PORT_NAME, timeout=100)
+lidar = RPLidar(None, PORT_NAME, timeout=10000)
 
 # Motor and Servo setup
 i2c_bus = busio.I2C(SCL, SDA)
