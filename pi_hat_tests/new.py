@@ -45,7 +45,7 @@ def update_steering_angle(angle):
 # Helper function to scale LIDAR distance data
 def scale_lidar_distance(distance, max_distance=100000):
     return min(distance, max_distance) / max_distance
-    print(distance)
+    print("hi")
 
 
 
