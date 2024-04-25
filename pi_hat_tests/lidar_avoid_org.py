@@ -71,9 +71,9 @@ if __name__ == "__main__":
 # here
 
 # Function to update motor speed
-def update_motor_speed(speed):
-    pwm_value = int((speed * 32767) + 32767)
-    motor.duty_cycle = pwm_value
+#def update_motor_speed(speed):
+#    pwm_value = int((speed * 32767) + 32767)
+#    motor.duty_cycle = pwm_value
     
 # Function to update steering angle
 def update_steering_angle(angle):
@@ -87,7 +87,7 @@ def scale_lidar_distance(distance, max_distance=4000):
 safe_distance = 500  # Minimum distance from an obstacle in millimeters
 backup_distance = 300  # Distance indicating too close, needing to back up
 turn_angle = 110  # Angle to turn when avoiding an object 45
-max_speed = 0.5
+max_speed = 0.03
 
 # Main loop with object avoidance
 try:
@@ -105,19 +105,19 @@ try:
                 # Too close, back up and turn
                 
                #update_motor_speed(-max_speed) 
-               Motor_Speed(pca, -0.8)   #reverse
+               Motor_Speed(pca, -0.03)   #reverse
                #update_steering_angle(-turn_angle)
                servo7.angle = 120
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
                 #update_motor_speed(max_speed)
-                Motor_Speed(pca, 0.8)
+                Motor_Speed(pca, 0.03)
                 #update_steering_angle(turn_angle)
                 servo7.angle = 70
             else:
                 # Safe distance, move forward
                 #update_motor_speed(max_speed)
-                Motor_Speed(pca, 0.8)
+                Motor_Speed(pca, 0.03)
                 #update_steering_angle(0)
                 servo7.angle = 95
 
