@@ -76,9 +76,9 @@ def main():
                 update_motor_speed(speed)
 
                 # Adjust steering based on error difference
-                if distance < 20:
+                if distance < 500:
                     update_steering_angle(70)
-                elif distance < 200:
+                elif distance < 1000:
                     update_steering_angle(130)
                 else:
                     update_steering_angle(90)
