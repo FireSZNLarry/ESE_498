@@ -57,7 +57,7 @@ def main():
             for scan in lidar.iter_scans():
                 for (_, angle, distance) in scan:
                     angle = int(angle)
-                    if 0 <= angle < 360:
+                    if 80 <= angle < 200:
                         scan_data[angle] = distance
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
