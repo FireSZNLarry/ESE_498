@@ -76,23 +76,23 @@ scan_data = [0]*360
 
 try:
     #print(lidar.info)
-    for scan in lidar.iter_scans():
-        for (_, angle, distance) in scan:
-            scan_data[min([359, floor(angle)])] = distance
-            if 120 <= angle < 160:
-                if distance < 500:
-                    print(distance)
-                    update_steering_angle(70)
-                    time.sleep(0.1)
-                elif distance < 1000:
-                    print(distance)
-                    update_steering_angle(130)
-                    time.sleep(0.1)
-                else:
-                    print(distance)
-                    update_steering_angle(90)
-                    time.sleep(0.1)
-        process_data(scan_data)
+    #for scan in lidar.iter_scans():
+    for (_, angle, distance) in scan:
+        scan_data[min([359, floor(angle)])] = distance
+        if 120 <= angle < 160:
+            if distance < 500:
+                print(distance)
+                update_steering_angle(70)
+                time.sleep(0.1)
+            elif distance < 1000:
+                print(distance)
+                update_steering_angle(130)
+                time.sleep(0.1)
+            else:
+                print(distance)
+                update_steering_angle(90)
+                time.sleep(0.1)
+    process_data(scan_data)
 
 except KeyboardInterrupt:
     print('Stoping.')
