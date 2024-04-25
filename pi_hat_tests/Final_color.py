@@ -50,8 +50,8 @@ if color == 'nyquil':
     hsv_max = np.array((100, 255, 255))
     print('nyquil color')
 else:
-    hsv_min = np.array((5, 50, 50))
-    hsv_max = np.array((15, 255, 255))
+    hsv_min = np.array((10, 50, 50))
+    hsv_max = np.array((20, 255, 255))
     print('ibuprofen color')
 
 colors = []
