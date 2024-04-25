@@ -11,6 +11,15 @@ from adafruit_rplidar import RPLidar
 import numpy as np
 from math import cos, sin, pi, floor
 
+
+
+
+from time import sleep
+
+#from picamera import PiCamera
+import threading
+import queue
+
 # Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
@@ -43,6 +52,32 @@ def update_steering_angle(angle):
 def scale_lidar_distance(distance, max_distance=4000):
     return min(distance, max_distance) / max_distance
 
+def Servo_Motor_Initialization():
+    i2c_bus = busio.I2C(SCL,SDA)
+    pca = PCA9685(i2c_bus)
+    pca.frequency = 100
+    return pca
+
+def Motor_Start(pca):
+    x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
+    #Motor_Speed(pca, 0.1)
+    time.sleep(2)
+    y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
+    #Motor_Speed(pca, -0.1)
+    time.sleep(2)
+    z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
+   
+
+def Motor_Speed(pca,percent):
+    #converts a -1 to 1 value to 16-bit duty cycle
+    speed = ((percent) * 3277) + 65535 * 0.15
+    pca.channels[15].duty_cycle = math.floor(speed)
+    #print(speed/65535)
+       
+#initialization
+pca = Servo_Motor_Initialization()
+Motor_Start(pca)
+
 # Control parameters
 safe_distance = 500  # Minimum distance from an obstacle in millimeters
 backup_distance = 300  # Distance indicating too close, needing to back up
@@ -63,15 +98,15 @@ try:
             # Check distances and react
             if front_distance < backup_distance:
                 # Too close, back up and turn
-                update_motor_speed(max_speed) #-
+                Motor_Speed(pca, -0.15) 
                 update_steering_angle(turn_angle) #-
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
-                update_motor_speed(max_speed)
+                Motor_Speed(pca, 0.15) 
                 update_steering_angle(turn_angle)
             else:
                 # Safe distance, move forward
-                update_motor_speed(max_speed)
+                Motor_Speed(pca, 0.15) 
                 update_steering_angle(0)
 
             # Update pygame display with LIDAR data
