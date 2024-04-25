@@ -97,6 +97,7 @@ try:
             front_distance = scan_data[0] if scan_data[0] != 0 else float('inf')
 
             # Check distances and react
+            print(i)
             if front_distance < backup_distance:
                 # Too close, back up and turn
                 i = 1
@@ -123,10 +124,12 @@ try:
                     #lcd.set_at(point, pygame.Color(255, 255, 255))
             #pygame.display.update()
     while i == 1:
+        print("i =1")
         Motor_Speed(pca, -0.15) 
         time.sleep(2)
         i = 0
     while i == 2:
+        print("i =2")
         Motor_Speed(pca, 0.15) 
         time.sleep(2)
         i = 0
