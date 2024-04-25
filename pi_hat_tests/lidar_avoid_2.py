@@ -5,7 +5,7 @@ import pygame
 import busio
 from board import SCL, SDA
 from adafruit_pca9685 import PCA9685
-import adafruit_motor.servo
+import adafruit_motor import servo
 import cv2
 from adafruit_rplidar import RPLidar
 import numpy as np
