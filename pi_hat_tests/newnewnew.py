@@ -85,9 +85,6 @@ try:
                 update_steering_angle(70)
                 time.sleep(0.1)
         process_data(scan_data)
-    
-    except ValueError:
-    pass
 except ValueError:
     pass
 lidar.stop()
