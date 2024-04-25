@@ -20,6 +20,7 @@ from time import sleep
 import threading
 import queue
 
+i = 0
 # Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
