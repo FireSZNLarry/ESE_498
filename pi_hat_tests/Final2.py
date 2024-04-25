@@ -52,7 +52,8 @@ channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
 
 
-
+servo7.angle = 70
+time.sleep(2)
 
 # Set up pygame and the display
 os.putenv('SDL_FBDEV', '/dev/fb1')
