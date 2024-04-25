@@ -16,11 +16,16 @@ Licensed under the MIT license.
 
 All text above must be included in any redistribution.
 """
-
+import math
 import os
 from math import cos, sin, pi, floor
 import pygame
 from adafruit_rplidar import RPLidar
+import time
+import busio
+from board import SCL, SDA
+from adafruit_pca9685 import PCA9685
+from adafruit_motor import servo
 
 # Set up pygame and the display
 os.putenv('SDL_FBDEV', '/dev/fb1')
@@ -36,6 +41,20 @@ lidar = RPLidar(None, PORT_NAME,timeout=3)
 
 # used to scale data to fit on the screen
 max_distance = 0
+
+# Motor and Servo setup
+i2c_bus = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c_bus)
+pca.frequency = 100
+motor_channel = 15
+steering_channel = 14
+
+servo_steering = servo.Servo(pca.channels[steering_channel])
+motor = pca.channels[motor_channel]
+
+
+def update_steering_angle(angle):
+    servo_steering.angle = angle
 
 #pylint: disable=redefined-outer-name,global-statement
 def process_data(data):
