@@ -77,11 +77,11 @@ def main():
 
                 # Adjust steering based on error difference
                 if distance < 500:
-                    update_steering_angle(70)
+                    servo7.angle(70)
                 elif distance < 1000:
-                    update_steering_angle(130)
+                    servo7.angle(130)
                 else:
-                    update_steering_angle(90)
+                    servo7.angle(90)
 
                 # Update visualization
                 lcd.fill((0, 0, 0))
