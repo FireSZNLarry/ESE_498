@@ -86,7 +86,7 @@ max_speed = 0.5
 
 # Main loop with object avoidance
 try:
-    while True:
+    while i == 0:
         scan_data = [0]*360
         for scan in lidar.iter_scans():
             for (_, angle, distance) in scan:
@@ -98,19 +98,16 @@ try:
             # Check distances and react
             if front_distance < backup_distance:
                 # Too close, back up and turn
-                Motor_Speed(pca, -0.15) 
+                i = 1
                 #servo7.angle = 70
-                time.sleep(2)
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
-                Motor_Speed(pca, 0.15) 
+                i = 2
                 #servo7.angle = 135
-                time.sleep(2)
             else:
                 # Safe distance, move forward
-                Motor_Speed(pca, 0.15) 
+                i = 2
                 #servo7.angle = 93
-                time.sleep(2)
 
             # Update pygame display with LIDAR data
             #lcd.fill((0, 0, 0))
@@ -124,6 +121,14 @@ try:
                     point = (160 + int(x), 120 + int(y))
                     #lcd.set_at(point, pygame.Color(255, 255, 255))
             #pygame.display.update()
+    while i == 1:
+        Motor_Speed(pca, -0.15) 
+        time.sleep(2)
+        i = 0
+    while i == 2:
+        Motor_Speed(pca, 0.15) 
+        time.sleep(2)
+        i = 0
 except KeyboardInterrupt:
     print('Stopping.')
 
