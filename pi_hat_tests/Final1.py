@@ -42,8 +42,17 @@ IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
 fps = 0
 
-hsv_min = np.array((70, 80, 80))
-hsv_max = np.array((100, 255, 255))
+
+color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')     # \n ---> newline  ---> It causes a line break 
+print(color)
+if color = 'nyquil':
+    hsv_min = np.array((70, 80, 80))
+    hsv_max = np.array((100, 255, 255))
+    print('nyquil color')
+else:
+    hsv_min = np.array((70, 80, 80))
+    hsv_max = np.array((100, 255, 255))
+    print('ibuprofen color')
 
 colors = []
 i = 0
@@ -167,7 +176,6 @@ def visualize_fps(image, fps: int):
 
 
 if __name__ == "__main__":
-    
         
     def Servo_Motor_Initialization():
        i2c_bus = busio.I2C(SCL,SDA)
