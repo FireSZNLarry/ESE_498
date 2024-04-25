@@ -49,6 +49,7 @@ def update_steering_angle(angle):
 # Helper function to scale LIDAR distance data
 def scale_lidar_distance(distance, max_distance=4000):
     return min(distance, max_distance) / max_distance
+    print(distance)
 
 # Control parameters for centering in a room or corridor
 desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
