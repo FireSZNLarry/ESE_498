@@ -30,7 +30,17 @@ steering_channel = 14
 servo_steering = servo.Servo(pca.channels[steering_channel])
 motor = pca.channels[motor_channel]
 
-# here
+#steering
+
+
+
+i2c = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c)
+pca.frequency = 100
+channel_num = 14
+servo7 = servo.Servo(pca.channels[channel_num])
+#steering
+# here motor
 def Servo_Motor_Initialization():
    i2c_bus = busio.I2C(SCL,SDA)
    pca = PCA9685(i2c_bus)
@@ -92,16 +102,23 @@ try:
             # Check distances and react
             if front_distance < backup_distance:
                 # Too close, back up and turn
-                update_motor_speed(max_speed) #-
-                update_steering_angle(turn_angle) #-
+                
+               #update_motor_speed(-max_speed) 
+               Motor_Speed(pca, -0.3)   #reverse
+               #update_steering_angle(-turn_angle)
+               servo7.angle = 120
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
-                update_motor_speed(max_speed)
-                update_steering_angle(turn_angle)
+                #update_motor_speed(max_speed)
+                Motor_Speed(pca, 0.3)
+                #update_steering_angle(turn_angle)
+                servo7.angle = 70
             else:
                 # Safe distance, move forward
-                update_motor_speed(max_speed)
-                update_steering_angle(0)
+                #update_motor_speed(max_speed)
+                Motor_Speed(pca, 0.3)
+                #update_steering_angle(0)
+                servo7.angle = 95
 
             # Update pygame display with LIDAR data
 #            lcd.fill((0, 0, 0))
