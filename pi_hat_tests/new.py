@@ -58,31 +58,28 @@ turn_sensitivity = 10  # Higher sensitivity in turning
 
 
 
-def main():
-    try:
-        scan_data = [0]*360
-        while True:
-            for scan in lidar.iter_scans():
-                for (_, angle, distance) in scan:
-                    angle = int(angle)
-                    if 80 <= angle < 200:
-                        scan_data[angle] = distance
-                        if distance < 500:
-                            update_steering_angle(70)
-                            time.sleep(0.1)
-                        elif distance < 1000:
-                            update_steering_angle(130)
-                            time.sleep(0.1)
-                        else:
-                            update_steering_angle(90)
-                            time.sleep(0.1)
+scan_data = [0]*360
+while True:
+    for scan in lidar.iter_scans():
+        for (_, angle, distance) in scan:
+            angle = int(angle)
+            if 80 <= angle < 200:
+                scan_data[angle] = distance
+                if distance < 500:
+                    update_steering_angle(70)
+                    time.sleep(0.1)
+                elif distance < 1000:
+                    update_steering_angle(130)
+                    time.sleep(0.1)
+                else:
+                    update_steering_angle(90)
+                    time.sleep(0.1)
                
-    except KeyboardInterrupt:
-        print('Stopping.')
-    finally:
-        lidar.stop()
-        lidar.disconnect()
-        pygame.quit()
+except KeyboardInterrupt:
+    print('Stopping.')
+finally:
+    lidar.stop()
+    lidar.disconnect()
+    pygame.quit()
 
-if __name__ == "__main__":
-    main()
+
