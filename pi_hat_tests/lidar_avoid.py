@@ -46,7 +46,7 @@ def scale_lidar_distance(distance, max_distance=4000):
 # Control parameters
 safe_distance = 500  # Minimum distance from an obstacle in millimeters
 backup_distance = 300  # Distance indicating too close, needing to back up
-turn_angle = 45  # Angle to turn when avoiding an object
+turn_angle = 110  # Angle to turn when avoiding an object 45
 max_speed = 0.5
 
 # Main loop with object avoidance
@@ -63,8 +63,8 @@ try:
             # Check distances and react
             if front_distance < backup_distance:
                 # Too close, back up and turn
-                update_motor_speed(-max_speed)
-                update_steering_angle(-turn_angle)
+                update_motor_speed(max_speed) #-
+                update_steering_angle(turn_angle) #-
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
                 update_motor_speed(max_speed)
