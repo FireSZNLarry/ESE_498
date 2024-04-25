@@ -98,15 +98,15 @@ try:
             # Check distances and react
             if front_distance < backup_distance:
                 # Too close, back up and turn
-                Motor_Speed(pca, -0.15) 
+                Motor_Speed(pwm, -0.15) 
                 update_steering_angle(turn_angle) #-
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
-                Motor_Speed(pca, 0.15) 
+                Motor_Speed(pwm, 0.15) 
                 update_steering_angle(turn_angle)
             else:
                 # Safe distance, move forward
-                Motor_Speed(pca, 0.15) 
+                Motor_Speed(pwm, 0.15) 
                 update_steering_angle(0)
 
             # Update pygame display with LIDAR data
