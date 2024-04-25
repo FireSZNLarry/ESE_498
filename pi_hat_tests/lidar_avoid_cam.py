@@ -76,7 +76,7 @@ def Motor_Speed(pca,percent):
        
 #initialization
 pca = Servo_Motor_Initialization()
-Motor_Start(pca)
+#Motor_Start(pca)
 
 # Control parameters
 safe_distance = 500  # Minimum distance from an obstacle in millimeters
