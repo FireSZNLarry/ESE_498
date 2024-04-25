@@ -75,11 +75,6 @@ while True:
                     update_steering_angle(90)
                     time.sleep(0.1)
                
-except KeyboardInterrupt:
-    print('Stopping.')
-finally:
-    lidar.stop()
-    lidar.disconnect()
-    pygame.quit()
+
 
 
