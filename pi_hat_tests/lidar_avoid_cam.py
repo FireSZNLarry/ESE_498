@@ -91,9 +91,11 @@ try:
         scan_data = [0]*360
         for scan in lidar.iter_scans():
             if i > 0:
+                print("break1")
                 break
             for (_, angle, distance) in scan:
                 if i > 0:
+                    print("break2")
                     break
                 scan_data[min([359, math.floor(angle)])] = distance
             
@@ -106,16 +108,19 @@ try:
                 # Too close, back up and turn
                 i = 1
                 #servo7.angle = 70
+                print("break3")
                 break
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
                 i = 2
                 #servo7.angle = 135
+                print("break4")
                 break
             else:
                 # Safe distance, move forward
                 i = 2
                 #servo7.angle = 93
+                print("break5")
                 break
         
             # Update pygame display with LIDAR data
