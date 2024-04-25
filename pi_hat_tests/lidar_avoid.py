@@ -17,7 +17,7 @@ pygame.init()
 lcd = pygame.display.set_mode((320, 240))
 pygame.mouse.set_visible(False)
 lcd.fill((0, 0, 0))
-pygame.display.update()
+#pygame.display.update()
 
 # LIDAR and Motor setup
 PORT_NAME = '/dev/ttyUSB0'
