@@ -85,7 +85,7 @@ try:
                     y = scaled_distance * math.sin(radians) * 119
                     point = (160 + int(x), 120 + int(y))
                     #lcd.set_at(point, pygame.Color(255, 255, 255))
-            #pygame.display.update()
+            pygame.display.update()
 except KeyboardInterrupt:
     print('Stopping.')
 
