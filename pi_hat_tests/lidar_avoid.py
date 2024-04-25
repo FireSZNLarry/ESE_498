@@ -9,6 +9,7 @@ from adafruit_motor import servo
 import cv2
 from adafruit_rplidar import RPLidar
 import numpy as np
+from math import cos, sin, pi, floor
 
 # Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
@@ -54,7 +55,7 @@ try:
         scan_data = [0]*360
         for scan in lidar.iter_scans():
             for (_, angle, distance) in scan:
-                scan_data[min([359, floor(angle)])] = distance
+                scan_data[min([359, math.floor(angle)])] = distance
             
             # Frontal distance
             front_distance = scan_data[0] if scan_data[0] != 0 else float('inf')
