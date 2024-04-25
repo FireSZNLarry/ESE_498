@@ -76,19 +76,7 @@ def main():
                         else:
                             update_steering_angle(90)
                             time.sleep(0.1)
-                # Update visualization
-                lcd.fill((0, 0, 0))
-                for angle in range(360):
-                    distance = scan_data[angle]
-                    if distance:
-                        scaled_distance = scale_lidar_distance(distance)
-                        radians = angle * pi / 180
-                        x = scaled_distance * cos(radians) * 119
-                        y = scaled_distance * sin(radians) * 119
-                        point = (160 + int(x), 120 + int(y))
-                        lcd.set_at(point, pygame.Color(255, 255, 255))
-                pygame.display.update()
-
+               
     except KeyboardInterrupt:
         print('Stopping.')
     finally:
