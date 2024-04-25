@@ -104,7 +104,7 @@ try:
                 update_steering_angle(0)
 
             # Update pygame display with LIDAR data
-            lcd.fill((0, 0, 0))
+#            lcd.fill((0, 0, 0))
             for angle in range(360):
                 distance = scan_data[angle]
                 if distance:
@@ -113,7 +113,7 @@ try:
                     x = scaled_distance * math.cos(radians) * 119
                     y = scaled_distance * math.sin(radians) * 119
                     point = (160 + int(x), 120 + int(y))
-                    lcd.set_at(point, pygame.Color(255, 255, 255))
+#                    lcd.set_at(point, pygame.Color(255, 255, 255))
             pygame.display.update()
 except KeyboardInterrupt:
     print('Stopping.')
