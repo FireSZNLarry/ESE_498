@@ -15,8 +15,8 @@ from math import cos, sin, pi, floor
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
 #lcd = pygame.display.set_mode((320, 240))
-pygame.mouse.set_visible(False)
-lcd.fill((0, 0, 0))
+#pygame.mouse.set_visible(False)
+#lcd.fill((0, 0, 0))
 #pygame.display.update()
 
 # LIDAR and Motor setup
