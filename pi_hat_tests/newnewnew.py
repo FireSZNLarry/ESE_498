@@ -65,9 +65,6 @@ def process_data(data):
         distance = data[angle]
         if distance > 0:                  # ignore initially ungathered data points
             if distance < 500:
-                print(distance)
-                update_steering_angle(70)
-                time.sleep(0.1)
                 max_distance = max([min([5000, distance]), max_distance])
                 radians = angle * pi / 180.0
                 x = distance * cos(radians)
@@ -77,14 +74,18 @@ def process_data(data):
     pygame.display.update()
 
 
-scan_data = [0]*900
+scan_data = [0]*360
 
 try:
     print(lidar.info)
     for scan in lidar.iter_scans():
         for (_, angle, distance) in scan:
             scan_data[min([359, floor(angle)])] = distance
-        process_data(scan_data)
+            if distance < 500:
+                print(distance)
+                update_steering_angle(70)
+                time.sleep(0.1)
+        #process_data(scan_data)
 except KeyboardInterrupt:
     print('Stoping.')
 lidar.stop()
