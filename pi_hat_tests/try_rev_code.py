@@ -21,10 +21,7 @@ servo_steering = servo.Servo(pca.channels[14])
 motor_channel = 15
 
 def motor_speed(pca, percent, reverse=False):
-    """
-    Controls the speed of the car's motor.
-    Negative speeds command the car to reverse.
-    """
+
     if reverse:
         speed = ((-abs(percent)) * 3277) + 65535 * 0.15  # Reverse speed calculation
     else:
@@ -32,15 +29,11 @@ def motor_speed(pca, percent, reverse=False):
     pca.channels[motor_channel].duty_cycle = math.floor(speed)
 
 def update_steering_angle(angle):
-    """
-    Updates the steering angle.
-    """
+
     servo_steering.angle = angle
 
 def scale_lidar_distance(distance, max_distance=3000):
-    """
-    Scales the LIDAR distance.
-    """
+
     return min(distance, max_distance) / max_distance
     
 
