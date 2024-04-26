@@ -25,10 +25,10 @@ momo.Motor_Speed(pca,0.175)
 # Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
-lcd = pygame.display.set_mode((320, 240))
-pygame.mouse.set_visible(False)
-lcd.fill((0, 0, 0))
-pygame.display.update()
+#lcd = pygame.display.set_mode((320, 240))
+#pygame.mouse.set_visible(False)
+#lcd.fill((0, 0, 0))
+#pygame.display.update()
 
 # LIDAR setup
 PORT_NAME = '/dev/ttyUSB0'
@@ -114,7 +114,7 @@ def main():
                         y = scaled_distance * sin(radians) * 119
                         point = (160 + int(x), 120 + int(y))
                         lcd.set_at(point, pygame.Color(255, 255, 255))
-                pygame.display.update()
+                #pygame.display.update()
 
     except KeyboardInterrupt:
         print('Stopping.')
