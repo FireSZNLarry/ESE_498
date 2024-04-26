@@ -153,7 +153,7 @@ if __name__ == "__main__":
                 if cx<120:
                     if cx>0:
                         print("right")
-                        momo.Motor_Speed(pca,0.17)
+                        momo.Motor_Speed(pca,0.2)
                         servo7.angle = 60
                         #time.sleep(0.025)
                 elif cx>120:
@@ -186,12 +186,12 @@ if __name__ == "__main__":
                                         point = (160 + int(x), 120 + int(y))
                         else:
                             print("left")
-                            momo.Motor_Speed(pca,0.17)
+                            momo.Motor_Speed(pca,0.2)
                             servo7.angle = 130
                             #time.sleep(0.025)
             else:
                 print("DNR")
-                momo.Motor_Speed(pca,0.17)
+                momo.Motor_Speed(pca,0.2)
                 servo7.angle = 60
                 #time.sleep(0.025)
     finally:
