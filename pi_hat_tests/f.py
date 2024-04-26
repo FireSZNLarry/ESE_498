@@ -183,7 +183,7 @@ def main():
                                         update_steering_angle(130)
                                         time.sleep(0.1)
                         else:
-                            print("DNR)
+                            print("DNR")
                             if distance < 2000:
                                 update_steering_angle(60)
                                 time.sleep(0.1)
