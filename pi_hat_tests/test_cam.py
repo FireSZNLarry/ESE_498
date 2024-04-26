@@ -56,7 +56,9 @@ desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1
 distance_tolerance = 100  # mm tolerance for distance maintenance
 max_speed = 0.5
 turn_sensitivity = 10  # Higher sensitivity in turning
-
+speed = 0.15
+update_motor_speed(speed)
+time.sleep(0.1)
 def main():
     try:
         scan_data = [0]*360
@@ -72,6 +74,9 @@ def main():
                         print(distance)
                         if distance < 500:
                           update_steering_angle(70)
+                          time.sleep(0.1)
+                          speed = 0.15
+                          update_motor_speed(speed)
                           time.sleep(0.1)
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
