@@ -59,29 +59,17 @@ def scale_lidar_distance(distance, max_distance=4000):
 
 ##
 # Function to update motor speed
-def update_motor_speed(speed):
-    # Maps speed range -1.0 to 1.0 to appropriate PWM values
-    pwm_value = int((speed * 32767) + 32767)
-    motor.duty_cycle = pwm_value
+
 
 # Control parameters for centering in a room or corridor
 desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
 distance_tolerance = 100  # mm tolerance for distance maintenance
 max_speed = 0.5
 turn_sensitivity = 10  # Higher sensitivity in turning
-speed = 0.15
-update_motor_speed(speed)
-time.sleep(1)
 def main():
     try:
-        speed = 0.15
-        update_motor_speed(speed)
-        time.sleep(1)
         scan_data = [0]*360
         while True:
-            speed = 0.15
-            update_motor_speed(speed)
-            time.sleep(1)
             for scan in lidar.iter_scans():
                 for (_, angle, distance) in scan:
                     angle = int(angle)
@@ -91,9 +79,6 @@ def main():
                         if distance < 500:
                           update_steering_angle(70)
                           time.sleep(0.1)
-                          speed = 0.15
-                          update_motor_speed(speed)
-                          time.sleep(1)
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
 #                right_distance = scan_data[90] or desired_distance_from_wall
@@ -116,9 +101,6 @@ def main():
              #   update_steering_angle(90)
 
                 # Update visualization
-                speed = 0.15
-                update_motor_speed(speed)
-                time.sleep(1)
                 lcd.fill((0, 0, 0))
                 for angle in range(360):
                     distance = scan_data[angle]
