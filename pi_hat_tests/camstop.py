@@ -102,7 +102,7 @@ def Motor_Speed(pca,percent):
 i2c = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c)
 pca.frequency = 100
-momo.Motor_Speed(pca,0)
+#momo.Motor_Speed(pca,0)
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
 PORT_NAME = '/dev/ttyUSB0'
@@ -118,12 +118,10 @@ def scale_lidar_distance(distance, max_distance=3000):
 
 if __name__ == "__main__":
     try:
-        momo.Motor_Speed(pca,0)
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
         cap.set(3, IMAGE_WIDTH)
         cap.set(4, IMAGE_HEIGHT)
         while True:
-            momo.Motor_Speed(pca,0)
             _, frame = cap.read()
             frame = cv2.blur(frame,(3,3))
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
