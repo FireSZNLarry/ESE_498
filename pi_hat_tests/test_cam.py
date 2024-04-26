@@ -11,6 +11,15 @@ from adafruit_rplidar import RPLidar
 
 import motorControl as momo
 
+
+i2c = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c)
+pca.frequency = 100
+channel_num = 14
+
+
+
+
 momo.Motor_Speed(pca,0.175)
 
 # Set up pygame for LIDAR visualization
