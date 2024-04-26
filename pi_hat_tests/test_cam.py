@@ -27,6 +27,7 @@ i2c_bus = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c_bus)
 pca.frequency = 100
 steering_channel = 14
+motor_channel = 15
 
 servo_steering = servo.Servo(pca.channels[steering_channel])
 motor = pca.channels[motor_channel]
