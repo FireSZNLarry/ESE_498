@@ -25,7 +25,7 @@ def motor_speed(pca, percent, reverse=False):
     if reverse:
         speed = ((-abs(percent)) * 3277) + 65535 * 0.15  # Reverse speed calculation
     else:
-        speed = (abs(percent) * 3277) + 65535 * 0.15     # Forward speed calculation
+        speed = (-abs(percent) * 3277) + 65535 * 0.15     # Forward speed calculation
     pca.channels[motor_channel].duty_cycle = math.floor(speed)
 
 def update_steering_angle(angle):
