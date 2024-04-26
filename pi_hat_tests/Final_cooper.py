@@ -39,13 +39,13 @@ pca.frequency = 100
 channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
 
-#def isset(v):
-#    try:
-#        type (eval(v))
-#    except:
-#        return 0
-#    else:
-#        return 1
+def isset(v):
+    try:
+        type (eval(v))
+    except:
+        return 0
+    else:
+        return 1
 
 def hsv2rgb(h, s, v):
     h = float(h) * 2
