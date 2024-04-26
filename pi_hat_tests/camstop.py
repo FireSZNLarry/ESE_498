@@ -43,6 +43,8 @@ pca.frequency = 100
 channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
 
+Motor_Speed(pca, 0) 
+
 def isset(v):
     try:
         type (eval(v))
@@ -98,7 +100,7 @@ def rgb2hsv(r, g, b):
 def Motor_Speed(pca,percent):
     speed = ((percent) * 3277) + 65535 * 0.15
     pca.channels[15].duty_cycle = math.floor(speed)
-Motor_Speed(pca, 0) 
+
 
 i2c = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c)
