@@ -9,6 +9,10 @@ from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
 from adafruit_rplidar import RPLidar
 
+import motorControl as momo
+
+momo.Motor_Speed(pca,0.175)
+
 # Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
