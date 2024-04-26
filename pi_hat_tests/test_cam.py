@@ -59,6 +59,7 @@ def main():
                     angle = int(angle)
                     if 80 <= angle < 200:
                         scan_data[angle] = distance
+                        print(distance)
                         if distance < 500:
                           update_steering_angle(70)
                           time.sleep(0.1)
