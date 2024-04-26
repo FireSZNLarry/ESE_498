@@ -1,23 +1,3 @@
-#!/usr/bin/python3
-
-# ------------------------------------------------------------------------------
-# This is a blob detection program which intend to find the biggest blob
-# in a given picture taken by a camera and return its central position.
-# 
-# Key Steps:
-# 1. Image Filtering
-# 2. Image Segmentation
-# 3. Detect Blobs
-# 4. Filter Blobs using a criteria
-# 5. Track Blobs
-# ------------------------------------------------------------------------------
-# automaticdai
-# YF Robotics Labrotary
-# Instagram: yfrobotics
-# Twitter: @yfrobotics
-# Website: https://www.yfrl.org
-# ------------------------------------------------------------------------------
-
 import cv2
 import numpy as np
 import time
@@ -138,10 +118,9 @@ def visualize_fps(image, fps: int):
 if __name__ == "__main__":
     def Motor_Speed(pca,percent):
        #converts a -1 to 1 value to 16-bit duty cycle
-        speed = ((percent) * 3277) + 65535 * 0.15
-        pca.channels[15].duty_cycle = math.floor(speed)
-        #print(speed/65535)
-        
+        #speed = ((percent) * 3277) + 65535 * 0.15
+        #pca.channels[15].duty_cycle = math.floor(speed)
+        #print(speed/65535)    
     try:
         # create video capture
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
