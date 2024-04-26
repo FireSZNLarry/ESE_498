@@ -40,6 +40,7 @@ def main():
                           time.sleep(0.1)
                           if distance < 700:
                               momo.Motor_Speed(pca,0)
+                              exit()
                 for angle in range(360):
                     distance = scan_data[angle]
                     if distance:
