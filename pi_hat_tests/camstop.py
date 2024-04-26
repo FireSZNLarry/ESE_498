@@ -43,7 +43,7 @@ pca.frequency = 100
 channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
 
-Motor_Speed(pca, 0) 
+
 
 def isset(v):
     try:
