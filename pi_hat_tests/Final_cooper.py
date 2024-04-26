@@ -47,13 +47,13 @@ def isset(v):
     else:
         return 1
 
-def on_mouse_click(event, x, y, flags, frame):
-    global colors
-    if event == cv2.EVENT_LBUTTONUP:
-        color_bgr = frame[y, x]
-        color_rgb = tuple(reversed(color_bgr))
-        color_hsv = rgb2hsv(color_rgb[0], color_rgb[1], color_rgb[2])
-        colors.append(color_hsv)
+#def on_mouse_click(event, x, y, flags, frame):
+#    global colors
+#    if event == cv2.EVENT_LBUTTONUP:
+#        color_bgr = frame[y, x]
+#        color_rgb = tuple(reversed(color_bgr))
+#        color_hsv = rgb2hsv(color_rgb[0], color_rgb[1], color_rgb[2])
+#        colors.append(color_hsv)
         
 def hsv2rgb(h, s, v):
     h = float(h) * 2
@@ -99,20 +99,6 @@ def rgb2hsv(r, g, b):
     v = int(v * 255)
     return (h, s, v)
 
-#def visualize_fps(image, fps: int):
-#    if len(np.shape(image)) < 3:
-#        text_color = (255, 255, 255)  # white
-#    else:
-#        text_color = (0, 255, 0)  # green
-#    row_size = 20  # pixels
-#    left_margin = 24  # pixels
-#    font_size = 1
-#    font_thickness = 1
-    # Draw the FPS counter
-#    fps_text = 'FPS = {:.1f}'.format(fps)
-#    text_location = (left_margin, row_size)
-#    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN, font_size, text_color, font_thickness)
-#    return image
 def Motor_Speed(pca,percent):
     speed = ((percent) * 3277) + 65535 * 0.15
     pca.channels[15].duty_cycle = math.floor(speed)
