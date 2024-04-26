@@ -4,7 +4,7 @@ import time
 import pygame
 import busio
 import motorControl as momo
-momo.Motor_Speed(pca,0.175)
+
 from board import SCL, SDA
 from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
@@ -12,6 +12,8 @@ import cv2
 from adafruit_rplidar import RPLidar
 import numpy as np
 from math import cos, sin, pi, floor
+
+momo.Motor_Speed(pca,0.175)
 
 # Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
