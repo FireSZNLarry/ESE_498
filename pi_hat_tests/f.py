@@ -103,46 +103,89 @@ if __name__ == "_main_":
         cap.set(4, IMAGE_HEIGHT)
         scan_data = [0]*360
         while True: 
-            _, frame = cap.read()
-            frame = cv2.blur(frame,(3,3))
-            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            if colors:
-                minh = min(c[0] for c in colors)
-                mins = min(c[1] for c in colors)
-                minv = min(c[2] for c in colors)
-                maxh = max(c[0] for c in colors)
-                maxs = max(c[1] for c in colors)
-                maxv = max(c[2] for c in colors)
-                hsv_min = np.array((minh, mins, minv))
-                hsv_max = np.array((maxh, maxs, maxv))
-            thresh = cv2.inRange(hsv, hsv_min, hsv_max)
-            thresh2 = thresh.copy()
-            (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
-            if major_ver == "2" or major_ver == "3":
-                _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-            else:
-                contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-            max_area = 0
-            for cnt in contours:
-                area = cv2.contourArea(cnt)
-                if area > max_area:
-                    max_area = area
-                    best_cnt = cnt
-            if isset('best_cnt'):
-                M = cv2.moments(best_cnt)
-                cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
+            
             for scan in lidar.iter_scans():
                 for (_, angle, distance) in scan:
                     angle = int(angle)
                     if 80 <= angle < 200:
+                        _, frame = cap.read()
+                        frame = cv2.blur(frame,(3,3))
+                        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                        if colors:
+                            minh = min(c[0] for c in colors)
+                            mins = min(c[1] for c in colors)
+                            minv = min(c[2] for c in colors)
+                            maxh = max(c[0] for c in colors)
+                            maxs = max(c[1] for c in colors)
+                            maxv = max(c[2] for c in colors)
+                            hsv_min = np.array((minh, mins, minv))
+                            hsv_max = np.array((maxh, maxs, maxv))
+                        thresh = cv2.inRange(hsv, hsv_min, hsv_max)
+                        thresh2 = thresh.copy()
+                        (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
+                        if major_ver == "2" or major_ver == "3":
+                            _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+                        else:
+                            contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+                        max_area = 0
+                        for cnt in contours:
+                            area = cv2.contourArea(cnt)
+                            if area > max_area:
+                                max_area = area
+                                best_cnt = cnt
+                        if isset('best_cnt'):
+                            M = cv2.moments(best_cnt)
+                            cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
+                            scan_data[angle] = distance
+                            print(distance)
+                            if cx<120:
+                                if cx>0:
+                                    print("right")
+                                    if distance < 2000:
+                                        momo.Motor_Speed(pca, 0.15)
+                                        update_steering_angle(60)
+                                        time.sleep(0.1)
+                                        if distance < 900:
+                                            momo.Motor_Speed(pca,0)
+                                            exit()
+                                    else:
+                                        momo.Motor_Speed(pca, 0.15)
+                                        update_steering_angle(60)
+                                        time.sleep(0.1)
+
+
                         
-                        scan_data[angle] = distance
-                        print(distance)
-                        if cx<120:
-                            if cx>0:
-                                print("right")
+                            elif cx>120:
+                                if cx<320:
+                                    if cx<220:
+                                        if distance < 2000:
+                                            update_steering_angle(95)
+                                            time.sleep(0.1)
+                                            if distance < 900:
+                                                momo.Motor_Speed(pca,0)
+                                                exit()
+                                        else:
+                                            print("center")
+                                            momo.Motor_Speed(pca, 0)
+                                            update_steering_angle(95)
+                                            time.sleep(0.1)
+                                    
+                                    
+                                    else:
+                                        print("left")
+                                        if distance < 2000:
+                                            update_steering_angle(130)
+                                            time.sleep(0.1)
+                                            if distance < 900:
+                                                momo.Motor_Speed(pca,0)
+                                                exit()
+                                        else:
+                                            momo.Motor_Speed(pca, 0.15)
+                                            update_steering_angle(130)
+                                            time.sleep(0.1)
+                            else:
+                                print("DNR")
                                 if distance < 2000:
-                                    momo.Motor_Speed(pca, 0.15)
                                     update_steering_angle(60)
                                     time.sleep(0.1)
                                     if distance < 900:
@@ -152,49 +195,6 @@ if __name__ == "_main_":
                                     momo.Motor_Speed(pca, 0.15)
                                     update_steering_angle(60)
                                     time.sleep(0.1)
-
-
-                        
-                        elif cx>120:
-                            if cx<320:
-                                if cx<220:
-                                    if distance < 2000:
-                                        update_steering_angle(95)
-                                        time.sleep(0.1)
-                                        if distance < 900:
-                                            momo.Motor_Speed(pca,0)
-                                            exit()
-                                    else:
-                                        print("center")
-                                        momo.Motor_Speed(pca, 0)
-                                        update_steering_angle(95)
-                                        time.sleep(0.1)
-                                    
-                                    
-                                else:
-                                    print("left")
-                                    if distance < 2000:
-                                        update_steering_angle(130)
-                                        time.sleep(0.1)
-                                        if distance < 900:
-                                            momo.Motor_Speed(pca,0)
-                                            exit()
-                                    else:
-                                        momo.Motor_Speed(pca, 0.15)
-                                        update_steering_angle(130)
-                                        time.sleep(0.1)
-                        else:
-                            print("DNR")
-                            if distance < 2000:
-                                update_steering_angle(60)
-                                time.sleep(0.1)
-                                if distance < 900:
-                                    momo.Motor_Speed(pca,0)
-                                    exit()
-                            else:
-                                momo.Motor_Speed(pca, 0.15)
-                                update_steering_angle(60)
-                                time.sleep(0.1)
                 for angle in range(360):
                     distance = scan_data[angle]
                     if distance:
