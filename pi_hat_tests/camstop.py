@@ -170,7 +170,7 @@ if __name__ == "__main__":
                                             update_steering_angle(95)
                                             momo.Motor_Speed(pca,0.1)
                                             time.sleep(0.1)
-                                            if distance < 2000:
+                                            if distance < 1000:
                                                 momo.Motor_Speed(pca,0)
                                                 exit()
                                 for angle in range(360):
