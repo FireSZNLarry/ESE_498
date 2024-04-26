@@ -61,6 +61,9 @@ update_motor_speed(speed)
 time.sleep(0.1)
 def main():
     try:
+        speed = 0.15
+        update_motor_speed(speed)
+        time.sleep(0.1)
         scan_data = [0]*360
         while True:
             speed = 0.15
@@ -100,6 +103,9 @@ def main():
              #   update_steering_angle(90)
 
                 # Update visualization
+                speed = 0.15
+                update_motor_speed(speed)
+                time.sleep(0.1)
                 lcd.fill((0, 0, 0))
                 for angle in range(360):
                     distance = scan_data[angle]
