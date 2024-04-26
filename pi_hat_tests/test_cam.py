@@ -113,7 +113,7 @@ def main():
                         x = scaled_distance * cos(radians) * 119
                         y = scaled_distance * sin(radians) * 119
                         point = (160 + int(x), 120 + int(y))
-                        lcd.set_at(point, pygame.Color(255, 255, 255))
+                        #lcd.set_at(point, pygame.Color(255, 255, 255))
                 #pygame.display.update()
 
     except KeyboardInterrupt:
