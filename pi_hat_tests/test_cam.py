@@ -60,9 +60,10 @@ turn_sensitivity = 10  # Higher sensitivity in turning
 def main():
     try:
         scan_data = [0]*360
-        speed = 0.15
-        update_motor_speed(speed)
         while True:
+            speed = 0.15
+            update_motor_speed(speed)
+            time.sleep(0.1)
             for scan in lidar.iter_scans():
                 for (_, angle, distance) in scan:
                     angle = int(angle)
