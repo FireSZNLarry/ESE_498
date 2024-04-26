@@ -195,10 +195,10 @@ if __name__ == "__main__":
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 60
                 time.sleep(0.1)
-            if cv2.waitKey(33) == 27:
-                break
-    except Exception as e:
-        print(e)
+#            if cv2.waitKey(33) == 27:
+#                break
+#    except Exception as e:
+#        print(e)
     finally:
         # Clean up and exit the program
         cv2.destroyAllWindows()
