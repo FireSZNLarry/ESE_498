@@ -15,6 +15,10 @@ import threading
 import queue
 import motorControl as momo
 
+
+
+
+
 CAMERA_DEVICE_ID = 0
 IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
@@ -114,10 +118,12 @@ def scale_lidar_distance(distance, max_distance=3000):
 
 if __name__ == "__main__":
     try:
+        momo.Motor_Speed(pca,0)
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
         cap.set(3, IMAGE_WIDTH)
         cap.set(4, IMAGE_HEIGHT)
         while True:
+            momo.Motor_Speed(pca,0)
             _, frame = cap.read()
             frame = cv2.blur(frame,(3,3))
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -155,7 +161,8 @@ if __name__ == "__main__":
                 elif cx>120:
                     if cx<320:
                         if cx<220:
-                            print("center")  
+                            print("center")
+                            momo.Motor_Speed(pca,0)
                             servo7.angle = 95
                             time.sleep(0.1)
                             scan_data = [0]*360
