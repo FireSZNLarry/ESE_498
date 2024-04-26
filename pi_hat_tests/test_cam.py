@@ -76,9 +76,12 @@ def main():
                     if 80 <= angle < 200:
                         scan_data[angle] = distance
                         print(distance)
-                        if distance < 500:
+                        if distance < 800:
                           update_steering_angle(70)
                           time.sleep(0.1)
+                          if distance < 400:
+                              momo.Motor_Speed(pca,0)
+                        
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
 #                right_distance = scan_data[90] or desired_distance_from_wall
