@@ -51,8 +51,8 @@ else:
     #hsv_min = np.array((55, 80, 80))
     #hsv_max = np.array((65, 255, 255))
     # yellow sign
-    hsv_min = np.array((0, 80, 80))
-    hsv_max = np.array((10, 255, 255))
+    hsv_min = np.array((40, 80, 80))
+    hsv_max = np.array((70, 255, 255))
     #print('ibuprofen color')
 
 colors = []
