@@ -15,8 +15,11 @@ import threading
 import queue
 import motorControl as momo
 
-
-
+i2c = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c)
+pca.frequency = 100
+channel_num = 14
+servo7 = servo.Servo(pca.channels[channel_num])
 momo.Motor_Speed(pca,0)
 
 CAMERA_DEVICE_ID = 0
@@ -40,11 +43,7 @@ else:
 colors = []
 i = 0
 
-i2c = busio.I2C(SCL, SDA)
-pca = PCA9685(i2c)
-pca.frequency = 100
-channel_num = 14
-servo7 = servo.Servo(pca.channels[channel_num])
+
 
 
 
