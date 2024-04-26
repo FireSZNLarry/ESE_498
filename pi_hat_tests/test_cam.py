@@ -75,24 +75,24 @@ def main():
                           time.sleep(0.1)
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
-                right_distance = scan_data[90] or desired_distance_from_wall
-                left_distance = scan_data[270] or desired_distance_from_wall
-                right_error = desired_distance_from_wall - right_distance
-                left_error = desired_distance_from_wall - left_distance
+#                right_distance = scan_data[90] or desired_distance_from_wall
+ #               left_distance = scan_data[270] or desired_distance_from_wall
+  #              right_error = desired_distance_from_wall - right_distance
+   #             left_error = desired_distance_from_wall - left_distance
 
                 # Calculate motor speed and steering angle based on average error
-                average_error = (right_error + left_error) / 2
-                if abs(average_error) > distance_tolerance:
-                    speed = (max_speed * average_error / desired_distance_from_wall)
-                    speed = max(-max_speed, min(max_speed, speed))
-                else:
-                    speed = 0
-                update_motor_speed(speed)
+    #            average_error = (right_error + left_error) / 2
+     #           if abs(average_error) > distance_tolerance:
+      #              speed = (max_speed * average_error / desired_distance_from_wall)
+       #             speed = max(-max_speed, min(max_speed, speed))
+        #        else:
+         #           speed = 0
+          #      update_motor_speed(speed)
 
                 # Adjust steering based on error difference
-                error_difference = left_error - right_error
-                steering_angle = 90 + (error_difference / distance_tolerance) * turn_sensitivity
-                update_steering_angle(90)
+           #     error_difference = left_error - right_error
+            #    steering_angle = 90 + (error_difference / distance_tolerance) * turn_sensitivity
+             #   update_steering_angle(90)
 
                 # Update visualization
                 lcd.fill((0, 0, 0))
