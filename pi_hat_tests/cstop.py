@@ -25,7 +25,7 @@ from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
 from adafruit_rplidar import RPLidar
 import motorControl as momo
-
+import math
 
 
 
@@ -157,11 +157,10 @@ if __name__ == "__main__":
                             Motor_Speed(pca, 0)  
                             servo7.angle = 95
                             time.sleep(0.1)
-                            import math
                             i2c = busio.I2C(SCL, SDA)
                             pca = PCA9685(i2c)
                             pca.frequency = 100
-                            momo.Motor_Speed(pca,0.175)
+                            momo.Motor_Speed(pca,0)
                             os.putenv('SDL_FBDEV', '/dev/fb1')
                             pygame.init()
                             PORT_NAME = '/dev/ttyUSB0'
