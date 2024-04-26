@@ -3,6 +3,8 @@ import os
 import time
 import pygame
 import busio
+import motorControl as momo
+momo.Motor_Speed(pca,0.175)
 from board import SCL, SDA
 from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
@@ -32,24 +34,23 @@ motor = pca.channels[motor_channel]
 
 #steering
 
-
-
 i2c = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c)
 pca.frequency = 100
 channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
 #steering
+
+
 # here motor
-if __name__ == "__main__":
-        
-    def Servo_Motor_Initialization():
+
+def Servo_Motor_Initialization():
        i2c_bus = busio.I2C(SCL,SDA)
        pca = PCA9685(i2c_bus)
        pca.frequency = 100
        return pca
 
-    def Motor_Start(pca):
+def Motor_Start(pca):
        x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
        #Motor_Speed(pca, 0.1)
        time.sleep(2)
@@ -59,7 +60,7 @@ if __name__ == "__main__":
        z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
    
 
-    def Motor_Speed(pca,percent):
+def Motor_Speed(pca,percent):
        #converts a -1 to 1 value to 16-bit duty cycle
        speed = ((percent) * 3277) + 65535 * 0.15
        pca.channels[15].duty_cycle = math.floor(speed)
@@ -87,7 +88,7 @@ def scale_lidar_distance(distance, max_distance=4000):
 safe_distance = 500  # Minimum distance from an obstacle in millimeters
 backup_distance = 300  # Distance indicating too close, needing to back up
 turn_angle = 110  # Angle to turn when avoiding an object 45
-max_speed = 0.03
+max_speed = 0.2
 
 # Main loop with object avoidance
 try:
