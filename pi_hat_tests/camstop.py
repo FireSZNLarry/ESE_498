@@ -160,7 +160,6 @@ if __name__ == "__main__":
                     if cx<320:
                         if cx<220:
                             print("center")
-                            momo.Motor_Speed(pca,0)
                             servo7.angle = 95
                             time.sleep(0.1)
                             scan_data = [0]*360
