@@ -133,42 +133,42 @@ if __name__ == "__main__":
                         print("right")
                         Motor_Speed(pca, 0.15)
                         servo7.angle = 60
-                        time.sleep(0.1)
+                        time.sleep(3)
                         Motor_Speed(pca, 0)
                         servo7.angle = 130
-                        time.sleep(0.1)
+                        time.sleep(3)
                         Motor_Speed(pca, -0.3)
                         servo7.angle = 130
-                        time.sleep(0.1)
+                        time.sleep(3)
                 elif cx>120:
                     if cx<320:
                         if cx<220:
                             print("center")
                             Motor_Speed(pca, 0)
                             servo7.angle = 95
-                            time.sleep(0.1)
+                            time.sleep(3)
                         else:
                             print("left")
                             Motor_Speed(pca, 0.15)
                             servo7.angle = 130
-                            time.sleep(0.1)
+                            time.sleep(3)
                             Motor_Speed(pca, 0)
                             servo7.angle = 60
-                            time.sleep(0.1)
+                            time.sleep(3)
                             Motor_Speed(pca, -0.3)
                             servo7.angle = 60
-                            time.sleep(0.1)
+                            time.sleep(3)
             else:
                 print("DNR")
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 60
-                time.sleep(0.1)
+                time.sleep(3)
                 Motor_Speed(pca, 0)
                 servo7.angle = 130
-                time.sleep(0.1)
+                time.sleep(3)
                 Motor_Speed(pca, -0.3)
                 servo7.angle = 130
-                time.sleep(0.1)
+                time.sleep(3)
     finally:
         cv2.destroyAllWindows()
         cap.release()
