@@ -21,12 +21,12 @@ fps = 0
 
 color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')
 if color == 'nyquil':
-    hsv_min = np.array((70, 80, 80))
-    hsv_max = np.array((100, 255, 255))
+    hsv_min = np.array((75, 80, 80))
+    hsv_max = np.array((90, 255, 255))
     print('nyquil color')
 else:
-    hsv_min = np.array((70, 80, 80))
-    hsv_max = np.array((100, 255, 255))
+    hsv_min = np.array((15, 80, 80))
+    hsv_max = np.array((30, 255, 255))
     print('ibuprofen color')
 
 colors = []
