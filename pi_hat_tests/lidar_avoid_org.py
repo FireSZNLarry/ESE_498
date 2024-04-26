@@ -25,7 +25,7 @@ pygame.display.update()
 PORT_NAME = '/dev/ttyUSB0'
 lidar = RPLidar(None, PORT_NAME, timeout=3)
 i2c_bus = busio.I2C(SCL, SDA)
-pca = PCA9685(i2c_bus)
+pca = PCA9685(i2c)
 pca.frequency = 100
 motor_channel = 15
 steering_channel = 14
@@ -72,9 +72,9 @@ def Motor_Speed(pca,percent):
 # here
 
 # Function to update motor speed
-#def update_motor_speed(speed):
-#    pwm_value = int((speed * 32767) + 32767)
-#    motor.duty_cycle = pwm_value
+def update_motor_speed(speed):
+    pwm_value = int((speed * 32767) + 32767)
+    motor.duty_cycle = pwm_value
     
 # Function to update steering angle
 def update_steering_angle(angle):
@@ -105,19 +105,19 @@ try:
             if front_distance < backup_distance:
                 # Too close, back up and turn
                 
-               #update_motor_speed(-max_speed) 
+               update_motor_speed(-max_speed) 
                Motor_Speed(pca, -0.03)   #reverse
                #update_steering_angle(-turn_angle)
                servo7.angle = 120
             elif front_distance < safe_distance:
                 # Close, but not too close, just turn
-                #update_motor_speed(max_speed)
+                update_motor_speed(max_speed)
                 Motor_Speed(pca, 0.03)
                 #update_steering_angle(turn_angle)
                 servo7.angle = 70
             else:
                 # Safe distance, move forward
-                #update_motor_speed(max_speed)
+                update_motor_speed(max_speed)
                 Motor_Speed(pca, 0.03)
                 #update_steering_angle(0)
                 servo7.angle = 95
