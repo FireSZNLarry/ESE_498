@@ -44,14 +44,6 @@ def update_steering_angle(angle):
 def scale_lidar_distance(distance, max_distance=4000):
     return min(distance, max_distance) / max_distance
 
-
-def Motor_Speed(pca,percent):
-    #converts a -1 to 1 value to 16-bit duty cycle
-    speed = ((percent) * 3277) + 65535 * 0.15
-    pca.channels[15].duty_cycle = math.floor(speed)
-    #print(speed/65535)
-
-
 ##
 # Function to update motor speed
 def update_motor_speed(speed):
