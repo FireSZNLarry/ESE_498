@@ -138,10 +138,10 @@ def visualize_fps(image, fps: int):
 if __name__ == "__main__":
     def Motor_Speed(pca,percent):
        #converts a -1 to 1 value to 16-bit duty cycle
-#       speed = ((percent) * 3277) + 65535 * 0.15
-#       pca.channels[15].duty_cycle = math.floor(speed)
-       #print(speed/65535)
-       
+        speed = ((percent) * 3277) + 65535 * 0.15
+        pca.channels[15].duty_cycle = math.floor(speed)
+        #print(speed/65535)
+        
     try:
         # create video capture
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
