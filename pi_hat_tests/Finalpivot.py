@@ -195,4 +195,3 @@ if __name__ == "__main__":
         lidar.stop()
         lidar.disconnect()
         pygame.quit()
-        GPIO.cleanup()
