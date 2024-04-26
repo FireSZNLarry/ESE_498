@@ -27,12 +27,12 @@ from board import SCL,SDA
 import busio
 from adafruit_motor import servo
 from adafruit_pca9685 import PCA9685
-#import os
-#from math import cos, sin, pi, floor
-#import pygame
-#from adafruit_rplidar import RPLidar
-#import threading
-#import queue
+import os
+from math import cos, sin, pi, floor
+import pygame
+from adafruit_rplidar import RPLidar
+import threading
+import queue
 
 CAMERA_DEVICE_ID = 0
 IMAGE_WIDTH = 320
