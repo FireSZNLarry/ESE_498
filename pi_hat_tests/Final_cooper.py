@@ -173,12 +173,12 @@ if __name__ == "__main__":
                     if cx>10:
                         print("right")
                         Motor_Speed(pca, 0.15) 
-                        servo7.angle = 70
+                        servo7.angle = 60
                         time.sleep(0.1)
                     else:
                         print("none")
                         Motor_Speed(pca, 0.15)
-                        servo7.angle = 70
+                        servo7.angle = 60
                         time.sleep(0.1)
                 elif cx>120:
                     if cx<310:
@@ -195,12 +195,12 @@ if __name__ == "__main__":
                     else:
                         print("none")
                         Motor_Speed(pca, 0.15)
-                        servo7.angle = 70
+                        servo7.angle = 60
                         time.sleep(0.1)
             else:
                 print("DNR")
                 Motor_Speed(pca, 0.15)
-                servo7.angle = 70
+                servo7.angle = 60
                 time.sleep(0.1)
                 
             ##
