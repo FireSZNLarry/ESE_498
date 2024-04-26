@@ -26,22 +26,18 @@ import math
 from board import SCL,SDA
 import busio
 from adafruit_motor import servo
-from adafruit_pca9685 import PCA9685
-
-import os
-from math import cos, sin, pi, floor
-import pygame
-from adafruit_rplidar import RPLidar
-
-#from picamera import PiCamera
-import threading
-import queue
+#from adafruit_pca9685 import PCA9685
+#import os
+#from math import cos, sin, pi, floor
+#import pygame
+#from adafruit_rplidar import RPLidar
+#import threading
+#import queue
 
 CAMERA_DEVICE_ID = 0
 IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
 fps = 0
-
 
 color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')     # \n ---> newline  ---> It causes a line break 
 print(color)
@@ -57,24 +53,11 @@ else:
 colors = []
 i = 0
 
-
 i2c = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c)
 pca.frequency = 100
 channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
-#for i in range(180):
-#    servo7.angle = i
-#    time.sleep(0.03)
-#for i in range(180):
-#    servo7.angle = 180 - i
-#    time.sleep(0.03)
-#print("hi")
-    
-    
-    
-    
-    
 
 def isset(v):
     try:
@@ -84,29 +67,14 @@ def isset(v):
     else:
         return 1
 
-
 def on_mouse_click(event, x, y, flags, frame):
     global colors
-
     if event == cv2.EVENT_LBUTTONUP:
         color_bgr = frame[y, x]
         color_rgb = tuple(reversed(color_bgr))
-        #frame[y,x].tolist()
-
-       # print(color_rgb)
-
         color_hsv = rgb2hsv(color_rgb[0], color_rgb[1], color_rgb[2])
-        #print(color_hsv)
-
         colors.append(color_hsv)
-
-        #print(colors)
-
-
-# R, G, B values are [0, 255]. 
-# Normally H value is [0, 359]. S, V values are [0, 1].
-# However in opencv, H is [0,179], S, V values are [0, 255].
-# Reference: https://docs.opencv.org/3.4/de/d25/imgproc_color_conversions.html
+        
 def hsv2rgb(h, s, v):
     h = float(h) * 2
     s = float(s) / 255
@@ -128,7 +96,6 @@ def hsv2rgb(h, s, v):
     r, g, b = int(r * 255), int(g * 255), int(b * 255)
     return (r, g, b)
 
-
 def rgb2hsv(r, g, b):
     r, g, b = r/255.0, g/255.0, b/255.0
     mx = max(r, g, b)
@@ -147,13 +114,10 @@ def rgb2hsv(r, g, b):
     else:
         s = df/mx
     v = mx
-
     h = int(h / 2)
     s = int(s * 255)
     v = int(v * 255)
-
     return (h, s, v)
-
 
 def visualize_fps(image, fps: int):
     if len(np.shape(image)) < 3:
@@ -162,36 +126,30 @@ def visualize_fps(image, fps: int):
         text_color = (0, 255, 0)  # green
     row_size = 20  # pixels
     left_margin = 24  # pixels
-
     font_size = 1
     font_thickness = 1
-
     # Draw the FPS counter
     fps_text = 'FPS = {:.1f}'.format(fps)
     text_location = (left_margin, row_size)
-    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-                font_size, text_color, font_thickness)
-
+    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN, font_size, text_color, font_thickness)
     return image
 
 
 if __name__ == "__main__":
-        
-    def Servo_Motor_Initialization():
-       i2c_bus = busio.I2C(SCL,SDA)
-       pca = PCA9685(i2c_bus)
-       pca.frequency = 100
-       return pca
-
-    def Motor_Start(pca):
-       x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
-       #Motor_Speed(pca, 0.1)
-       time.sleep(2)
-       y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
-       #Motor_Speed(pca, -0.1)
-       time.sleep(2)
-       z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
-   
+#    def Servo_Motor_Initialization():
+#       i2c_bus = busio.I2C(SCL,SDA)
+#       pca = PCA9685(i2c_bus)
+#       pca.frequency = 100
+#       return pca
+#
+#    def Motor_Start(pca):
+#       x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
+#       #Motor_Speed(pca, 0.1)
+#       time.sleep(2)
+#       y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
+#       #Motor_Speed(pca, -0.1)
+#       time.sleep(2)
+#       z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
 
     def Motor_Speed(pca,percent):
        #converts a -1 to 1 value to 16-bit duty cycle
@@ -199,47 +157,24 @@ if __name__ == "__main__":
        pca.channels[15].duty_cycle = math.floor(speed)
        #print(speed/65535)
        
-    #initialization
-    pca = Servo_Motor_Initialization()
-    Motor_Start(pca)
-    
-#    if i == 0:
-#        Motor_Speed(pca, 0) 
-#        servo7.angle = 120
-#        time.sleep(1)
-#        Motor_Speed(pca, -0.5) 
-#        servo7.angle = 120
-#        time.sleep(1)
-#        i += 1    
-
+#    #initialization
+#    pca = Servo_Motor_Initialization()
+#    Motor_Start(pca)
 
     try:
         # create video capture
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
-
         # set resolution to 320x240 to reduce latency 
         cap.set(3, IMAGE_WIDTH)
         cap.set(4, IMAGE_HEIGHT)
-
         while True:
-
-            # ----------------------------------------------------------------------
             # record start time
             start_time = time.time()
             # Read the frames frome a camera
             _, frame = cap.read()
             frame = cv2.blur(frame,(3,3))
-
-            # Or get it from a JPEG
-            # frame = cv2.imread('frame0010.jpg', 1)
-
             # Convert the image to hsv space and find range of colors
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            #cv2.namedWindow('frame')
-            #cv2.setMouseCallback('frame', on_mouse_click, frame)
-            # Uncomment this for RED tag
-            # thresh = cv2.inRange(hsv,np.array((120, 80, 80)), np.array((180, 255, 255)))
-
             # find the color using a color threshhold
             if colors:
                 # find max & min h, s, v
@@ -249,25 +184,19 @@ if __name__ == "__main__":
                 maxh = max(c[0] for c in colors)
                 maxs = max(c[1] for c in colors)
                 maxv = max(c[2] for c in colors)
-
                 #print("New HSV threshold: ", (minh, mins, minv), (maxh, maxs, maxv))
                 hsv_min = np.array((minh, mins, minv))
                 hsv_max = np.array((maxh, maxs, maxv))
-                
-
             thresh = cv2.inRange(hsv, hsv_min, hsv_max)
             thresh2 = thresh.copy()
-            
             # find contours in the threshold image
             (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
             #print(major_ver, minor_ver, subminor_ver)
-
             # findContours() has different form for opencv2 and opencv3
             if major_ver == "2" or major_ver == "3":
                 _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
             else:
                 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-
             # finding contour with maximum area and store it as best_cnt
             max_area = 0
             for cnt in contours:
@@ -275,9 +204,6 @@ if __name__ == "__main__":
                 if area > max_area:
                     max_area = area
                     best_cnt = cnt
-                    
-                    
-            
             # finding centroids of best_cnt and draw a circle there
             if isset('best_cnt'):
                 M = cv2.moments(best_cnt)
@@ -319,9 +245,6 @@ if __name__ == "__main__":
                 time.sleep(2)
                 
             ##
-            
-            
-
            
 
             # Show the original and processed image
@@ -334,7 +257,6 @@ if __name__ == "__main__":
             # calculate FPS
             seconds = end_time - start_time
             fps = 1.0 / seconds
-            #print("Estimated fps:{0:0.1f}".format(fps));
             # if key pressed is 'Esc' then exit the loop
             if cv2.waitKey(33) == 27:
                 break
@@ -344,120 +266,3 @@ if __name__ == "__main__":
         # Clean up and exit the program
         cv2.destroyAllWindows()
         cap.release()
-
-
-
-
-
-
-
-
-
-
-
-
-import math
-import os
-import time
-import pygame
-import busio
-from math import cos, sin, pi, floor
-from board import SCL, SDA
-from adafruit_pca9685 import PCA9685
-from adafruit_motor import servo
-from adafruit_rplidar import RPLidar
-
-# Set up pygame for LIDAR visualization
-os.putenv('SDL_FBDEV', '/dev/fb1')
-pygame.init()
-lcd = pygame.display.set_mode((320, 240))
-pygame.mouse.set_visible(False)
-lcd.fill((0, 0, 0))
-pygame.display.update()
-
-# LIDAR setup
-PORT_NAME = '/dev/ttyUSB0'
-lidar = RPLidar(None, PORT_NAME, timeout=3)
-
-# Motor and Servo setup
-i2c_bus = busio.I2C(SCL, SDA)
-pca = PCA9685(i2c_bus)
-pca.frequency = 100
-motor_channel = 15
-steering_channel = 14
-
-servo_steering = servo.Servo(pca.channels[steering_channel])
-motor = pca.channels[motor_channel]
-
-# Helper function to update motor speed
-def update_motor_speed(speed):
-    pwm_value = int((speed * 32767) + 32767)
-    motor.duty_cycle = pwm_value
-
-# Helper function to update steering angle
-def update_steering_angle(angle):
-    servo_steering.angle = angle
-
-# Helper function to scale LIDAR distance data
-def scale_lidar_distance(distance, max_distance=4000):
-    return min(distance, max_distance) / max_distance
-
-# Control parameters for centering in a room or corridor
-desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
-distance_tolerance = 100  # mm tolerance for distance maintenance
-max_speed = 0.5
-turn_sensitivity = 10  # Higher sensitivity in turning
-
-def main():
-    try:
-        scan_data = [0]*360
-        while True:
-            for scan in lidar.iter_scans():
-                for (_, angle, distance) in scan:
-                    angle = int(angle)
-                    if 80 <= angle < 200:
-                        scan_data[angle] = distance
-
-                # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
-                right_distance = scan_data[90] or desired_distance_from_wall
-                left_distance = scan_data[270] or desired_distance_from_wall
-                right_error = desired_distance_from_wall - right_distance
-                left_error = desired_distance_from_wall - left_distance
-
-                # Calculate motor speed and steering angle based on average error
-                average_error = (right_error + left_error) / 2
-                if abs(average_error) > distance_tolerance:
-                    speed = (max_speed * average_error / desired_distance_from_wall)
-                    speed = max(-max_speed, min(max_speed, speed))
-                else:
-                    speed = 0
-                update_motor_speed(speed)
-
-                # Adjust steering based on error difference
-                error_difference = left_error - right_error
-                steering_angle = 90 + (error_difference / distance_tolerance) * turn_sensitivity
-                update_steering_angle(90)
-
-                # Update visualization
-                lcd.fill((0, 0, 0))
-                for angle in range(360):
-                    distance = scan_data[angle]
-                    if distance:
-                        scaled_distance = scale_lidar_distance(distance)
-                        radians = angle * pi / 180
-                        x = scaled_distance * cos(radians) * 119
-                        y = scaled_distance * sin(radians) * 119
-                        point = (160 + int(x), 120 + int(y))
-                        lcd.set_at(point, pygame.Color(255, 255, 255))
-                pygame.display.update()
-
-    except KeyboardInterrupt:
-        print('Stopping.')
-    finally:
-        lidar.stop()
-        lidar.disconnect()
-        pygame.quit()
-
-if __name__ == "__main__":
-    main()
-
