@@ -58,17 +58,17 @@ max_speed = 0.5
 turn_sensitivity = 10  # Higher sensitivity in turning
 speed = 0.15
 update_motor_speed(speed)
-time.sleep(0.1)
+time.sleep(1)
 def main():
     try:
         speed = 0.15
         update_motor_speed(speed)
-        time.sleep(0.1)
+        time.sleep(1)
         scan_data = [0]*360
         while True:
             speed = 0.15
             update_motor_speed(speed)
-            time.sleep(0.1)
+            time.sleep(1)
             for scan in lidar.iter_scans():
                 for (_, angle, distance) in scan:
                     angle = int(angle)
@@ -80,7 +80,7 @@ def main():
                           time.sleep(0.1)
                           speed = 0.15
                           update_motor_speed(speed)
-                          time.sleep(0.1)
+                          time.sleep(1)
 
                 # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
 #                right_distance = scan_data[90] or desired_distance_from_wall
@@ -105,7 +105,7 @@ def main():
                 # Update visualization
                 speed = 0.15
                 update_motor_speed(speed)
-                time.sleep(0.1)
+                time.sleep(01)
                 lcd.fill((0, 0, 0))
                 for angle in range(360):
                     distance = scan_data[angle]
