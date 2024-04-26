@@ -13,6 +13,8 @@ import pygame
 from adafruit_rplidar import RPLidar
 import threading
 import queue
+import motorControl as momo
+
 
 CAMERA_DEVICE_ID = 0
 IMAGE_WIDTH = 320
@@ -94,6 +96,23 @@ def Motor_Speed(pca,percent):
     speed = ((percent) * 3277) + 65535 * 0.15
     pca.channels[15].duty_cycle = math.floor(speed)
 
+i2c = busio.I2C(SCL, SDA)
+pca = PCA9685(i2c)
+pca.frequency = 100
+momo.Motor_Speed(pca,0.175)
+os.putenv('SDL_FBDEV', '/dev/fb1')
+pygame.init()
+PORT_NAME = '/dev/ttyUSB0'
+lidar = RPLidar(None, PORT_NAME, timeout=3)
+steering_channel = 14
+motor_channel = 15
+servo_steering = servo.Servo(pca.channels[steering_channel])
+def update_steering_angle(angle):
+    servo_steering.angle = angle
+def scale_lidar_distance(distance, max_distance=3000):
+    return min(distance, max_distance) / max_distance
+    
+
 if __name__ == "__main__":
     try:
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
@@ -137,10 +156,30 @@ if __name__ == "__main__":
                 elif cx>120:
                     if cx<320:
                         if cx<220:
-                            print("center")
-                            Motor_Speed(pca, 0)  
+                            print("center")  
                             servo7.angle = 95
                             time.sleep(0.1)
+                            scan_data = [0]*360
+                            for scan in lidar.iter_scans():
+                                for (_, angle, distance) in scan:
+                                    angle = int(angle)
+                                    if 80 <= angle < 200:
+                                        scan_data[angle] = distance
+                                        print(distance)
+                                        if distance < 2000:
+                                            update_steering_angle(70)
+                                            time.sleep(0.1)
+                                            if distance < 900:
+                                                momo.Motor_Speed(pca,0)
+                                                exit()
+                                for angle in range(360):
+                                    distance = scan_data[angle]
+                                    if distance:
+                                        scaled_distance = scale_lidar_distance(distance)
+                                        radians = angle * pi / 180
+                                        x = scaled_distance * cos(radians) * 119
+                                        y = scaled_distance * sin(radians) * 119
+                                        point = (160 + int(x), 120 + int(y))
                         else:
                             print("left")
                             Motor_Speed(pca, 0.15)
@@ -154,66 +193,9 @@ if __name__ == "__main__":
     finally:
         cv2.destroyAllWindows()
         cap.release()
-
-
-
-
-import math
-import os
-import time
-import pygame
-import busio
-from math import cos, sin, pi, floor
-from board import SCL, SDA
-from adafruit_pca9685 import PCA9685
-from adafruit_motor import servo
-from adafruit_rplidar import RPLidar
-import motorControl as momo
-
-i2c = busio.I2C(SCL, SDA)
-pca = PCA9685(i2c)
-pca.frequency = 100
-momo.Motor_Speed(pca,0.175)
-os.putenv('SDL_FBDEV', '/dev/fb1')
-pygame.init()
-PORT_NAME = '/dev/ttyUSB0'
-lidar = RPLidar(None, PORT_NAME, timeout=3)
-steering_channel = 14
-motor_channel = 15
-servo_steering = servo.Servo(pca.channels[steering_channel])
-def update_steering_angle(angle):
-    servo_steering.angle = angle
-def scale_lidar_distance(distance, max_distance=3000):
-    return min(distance, max_distance) / max_distance
-def main():
-    try:
-        scan_data = [0]*360
-        while True:
-            for scan in lidar.iter_scans():
-                for (_, angle, distance) in scan:
-                    angle = int(angle)
-                    if 80 <= angle < 200:
-                        scan_data[angle] = distance
-                        print(distance)
-                        if distance < 2000:
-                          update_steering_angle(70)
-                          time.sleep(0.1)
-                          if distance < 900:
-                              momo.Motor_Speed(pca,0)
-                              exit()
-                for angle in range(360):
-                    distance = scan_data[angle]
-                    if distance:
-                        scaled_distance = scale_lidar_distance(distance)
-                        radians = angle * pi / 180
-                        x = scaled_distance * cos(radians) * 119
-                        y = scaled_distance * sin(radians) * 119
-                        point = (160 + int(x), 120 + int(y))
-    except KeyboardInterrupt:
-        print('Stopping.')
-    finally:
         lidar.stop()
         lidar.disconnect()
         pygame.quit()
-if __name__ == "__main__":
-    main()
+
+
+
