@@ -183,12 +183,12 @@ if __name__ == "__main__":
                 print("DNR")
                 momo.Motor_Speed(pca,0.15)
                 servo7.angle = 60
-                time.sleep(0.01)
-#                momo.Motor_Speed(pca,0)
-#                servo7.angle = 130
-#                time.sleep(0.01)
-#                momo.Motor_Speed(pca,-0.15)
-#                time.sleep(0.01)
+                time.sleep(0.05)
+                momo.Motor_Speed(pca,0)
+                servo7.angle = 130
+                time.sleep(0.05)
+                momo.Motor_Speed(pca,-0.15)
+                time.sleep(0.05)
     finally:
         cv2.destroyAllWindows()
         cap.release()
