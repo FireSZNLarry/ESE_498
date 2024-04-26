@@ -99,25 +99,23 @@ def rgb2hsv(r, g, b):
     v = int(v * 255)
     return (h, s, v)
 
-def visualize_fps(image, fps: int):
-    if len(np.shape(image)) < 3:
-        text_color = (255, 255, 255)  # white
-    else:
-        text_color = (0, 255, 0)  # green
-    row_size = 20  # pixels
-    left_margin = 24  # pixels
-    font_size = 1
-    font_thickness = 1
+#def visualize_fps(image, fps: int):
+#    if len(np.shape(image)) < 3:
+#        text_color = (255, 255, 255)  # white
+#    else:
+#        text_color = (0, 255, 0)  # green
+#    row_size = 20  # pixels
+#    left_margin = 24  # pixels
+#    font_size = 1
+#    font_thickness = 1
     # Draw the FPS counter
-    fps_text = 'FPS = {:.1f}'.format(fps)
-    text_location = (left_margin, row_size)
-    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN, font_size, text_color, font_thickness)
-    return image
+#    fps_text = 'FPS = {:.1f}'.format(fps)
+#    text_location = (left_margin, row_size)
+#    cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN, font_size, text_color, font_thickness)
+#    return image
 def Motor_Speed(pca,percent):
-    #converts a -1 to 1 value to 16-bit duty cycle
     speed = ((percent) * 3277) + 65535 * 0.15
     pca.channels[15].duty_cycle = math.floor(speed)
-    #print(speed/65535)
 
 if __name__ == "__main__":
     try:
@@ -125,8 +123,6 @@ if __name__ == "__main__":
         cap.set(3, IMAGE_WIDTH)
         cap.set(4, IMAGE_HEIGHT)
         while True:
-#            start_time = time.time()
-            # Read the frames from a camera
             _, frame = cap.read()
             frame = cv2.blur(frame,(3,3))
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -141,26 +137,20 @@ if __name__ == "__main__":
                 hsv_max = np.array((maxh, maxs, maxv))
             thresh = cv2.inRange(hsv, hsv_min, hsv_max)
             thresh2 = thresh.copy()
-            # find contours in the threshold image
             (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
-            #print(major_ver, minor_ver, subminor_ver)
-            # findContours() has different form for opencv2 and opencv3
             if major_ver == "2" or major_ver == "3":
                 _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
             else:
                 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-            # finding contour with maximum area and store it as best_cnt
             max_area = 0
             for cnt in contours:
                 area = cv2.contourArea(cnt)
                 if area > max_area:
                     max_area = area
                     best_cnt = cnt
-            # finding centroids of best_cnt and draw a circle there
             if isset('best_cnt'):
                 M = cv2.moments(best_cnt)
                 cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
-#                cv2.circle(frame,(cx,cy),20,255,-1)
                 if cx<120:
                     if cx>10:
                         print("right")
