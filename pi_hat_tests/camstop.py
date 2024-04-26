@@ -166,14 +166,14 @@ if __name__ == "__main__":
                             for scan in lidar.iter_scans():
                                 for (_, angle, distance) in scan:
                                     angle = int(angle)
-                                    if 130 <= angle < 150:
+                                    if 90 <= angle < 110:
                                         scan_data[angle] = distance
                                         print(distance)
                                         if distance < 3000:
                                             update_steering_angle(95)
                                             momo.Motor_Speed(pca,0.15)
                                             time.sleep(0.025)
-                                            if distance < 1800:
+                                            if distance < 1000:
                                                 momo.Motor_Speed(pca,0)
                                                 exit()
                                 for angle in range(360):
