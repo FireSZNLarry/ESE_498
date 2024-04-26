@@ -35,10 +35,10 @@ def main():
                     if 80 <= angle < 200:
                         scan_data[angle] = distance
                         print(distance)
-                        if distance < 1000:
+                        if distance < 2000:
                           update_steering_angle(70)
                           time.sleep(0.1)
-                          if distance < 700:
+                          if distance < 900:
                               momo.Motor_Speed(pca,0)
                               exit()
                 for angle in range(360):
