@@ -96,7 +96,7 @@ def update_steering_angle(angle):
     servo_steering.angle = angle
 def scale_lidar_distance(distance, max_distance=3000):
     return min(distance, max_distance) / max_distance
-def main():
+if __name__ == "_main_":
     try:
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
         cap.set(3, IMAGE_WIDTH)
@@ -211,5 +211,4 @@ def main():
         pygame.quit()
         cv2.destroyAllWindows()
         cap.release()
-if __name__ == "__main__":
-    main()
+
