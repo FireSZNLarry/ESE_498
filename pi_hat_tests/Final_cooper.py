@@ -19,7 +19,7 @@ IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
 fps = 0
 
-color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')     # \n ---> newline  ---> It causes a line break 
+color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')
 print(color)
 if color == 'nyquil':
     hsv_min = np.array((70, 80, 80))
@@ -121,29 +121,22 @@ def Motor_Speed(pca,percent):
 
 if __name__ == "__main__":
     try:
-        # create video capture
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
-        # set resolution to 320x240 to reduce latency 
         cap.set(3, IMAGE_WIDTH)
         cap.set(4, IMAGE_HEIGHT)
         while True:
-            # record start time
-            start_time = time.time()
-            # Read the frames frome a camera
+#            start_time = time.time()
+            # Read the frames from a camera
             _, frame = cap.read()
             frame = cv2.blur(frame,(3,3))
-            # Convert the image to hsv space and find range of colors
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            # find the color using a color threshhold
             if colors:
-                # find max & min h, s, v
                 minh = min(c[0] for c in colors)
                 mins = min(c[1] for c in colors)
                 minv = min(c[2] for c in colors)
                 maxh = max(c[0] for c in colors)
                 maxs = max(c[1] for c in colors)
                 maxv = max(c[2] for c in colors)
-                #print("New HSV threshold: ", (minh, mins, minv), (maxh, maxs, maxv))
                 hsv_min = np.array((minh, mins, minv))
                 hsv_max = np.array((maxh, maxs, maxv))
             thresh = cv2.inRange(hsv, hsv_min, hsv_max)
@@ -205,10 +198,10 @@ if __name__ == "__main__":
                 
             ##
             # record end time
-            end_time = time.time()
+ #           end_time = time.time()
             # calculate FPS
-            seconds = end_time - start_time
-            fps = 1.0 / seconds
+ #           seconds = end_time - start_time
+ #           fps = 1.0 / seconds
             # if key pressed is 'Esc' then exit the loop
             if cv2.waitKey(33) == 27:
                 break
