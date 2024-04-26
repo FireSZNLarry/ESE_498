@@ -27,6 +27,14 @@ IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
 fps = 0
 
+os.putenv('SDL_FBDEV', '/dev/fb1')
+pygame.init()
+PORT_NAME = '/dev/ttyUSB0'
+lidar = RPLidar(None, PORT_NAME, timeout=3)
+steering_channel = 14
+motor_channel = 15
+servo_steering = servo.Servo(pca.channels[steering_channel])
+
 color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')
 if color == 'nyquil':
     hsv_min = np.array((75, 80, 80))
@@ -39,10 +47,6 @@ else:
 
 colors = []
 i = 0
-
-
-
-
 
 def isset(v):
     try:
@@ -96,13 +100,6 @@ def rgb2hsv(r, g, b):
     v = int(v * 255)
     return (h, s, v)
 
-os.putenv('SDL_FBDEV', '/dev/fb1')
-pygame.init()
-PORT_NAME = '/dev/ttyUSB0'
-lidar = RPLidar(None, PORT_NAME, timeout=3)
-steering_channel = 14
-motor_channel = 15
-servo_steering = servo.Servo(pca.channels[steering_channel])
 def update_steering_angle(angle):
     servo_steering.angle = angle
 def scale_lidar_distance(distance, max_distance=3000):
