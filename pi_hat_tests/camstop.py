@@ -16,7 +16,7 @@ import queue
 import motorControl as momo
 
 
-Motor_Speed(pca, 0.15) 
+Motor_Speed(pca, 0) 
 
 
 CAMERA_DEVICE_ID = 0
