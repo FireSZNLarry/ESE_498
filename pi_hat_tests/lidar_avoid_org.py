@@ -36,14 +36,14 @@ motor = pca.channels[motor_channel]
 
 #steering
 
-i2c = busio.I2C(SCL, SDA)
-pca = PCA9685(i2c)
-pca.frequency = 100
-channel_num = 14
+#i2c = busio.I2C(SCL, SDA)
+#pca = PCA9685(i2c)
+$pca.frequency = 100
+#channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
 #steering
 
-
+momo.Motor_Speed(pca,0.175)
 # here motor
 
 
