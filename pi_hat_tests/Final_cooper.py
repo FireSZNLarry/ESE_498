@@ -20,7 +20,6 @@ IMAGE_HEIGHT = 240
 fps = 0
 
 color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')
-print(color)
 if color == 'nyquil':
     hsv_min = np.array((70, 80, 80))
     hsv_max = np.array((100, 255, 255))
