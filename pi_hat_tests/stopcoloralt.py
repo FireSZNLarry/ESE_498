@@ -42,14 +42,14 @@ if color == 'nyquil':
     print('nyquil color')
 else:
     # orang juice update
-    hsv_min = np.array((15, 80, 80))
-    hsv_max = np.array((20, 255, 255))
+    #hsv_min = np.array((15, 80, 80))
+    #hsv_max = np.array((20, 255, 255))
     # orange juice original
     #hsv_min = np.array((15, 80, 80))
     #hsv_max = np.array((27, 255, 255))
     # green box
-    #hsv_min = np.array((55, 80, 80))
-    #hsv_max = np.array((65, 255, 255))
+    hsv_min = np.array((55, 80, 80))
+    hsv_max = np.array((65, 255, 255))
     # yellow sign
     #hsv_min = np.array((28, 80, 80))
     #hsv_max = np.array((32, 255, 255))
