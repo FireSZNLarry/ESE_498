@@ -28,14 +28,11 @@ IMAGE_HEIGHT = 240
 fps = 0
 
 color = input('What object do you want to find? Options are: ibuprofen, nyquil.\n')
-momo.Motor_Speed(pca,0)
 if color == 'nyquil':
-    momo.Motor_Speed(pca,0)
     hsv_min = np.array((75, 80, 80))
     hsv_max = np.array((90, 255, 255))
     print('nyquil color')
 else:
-    momo.Motor_Speed(pca,0)
     hsv_min = np.array((15, 80, 80))
     hsv_max = np.array((27, 255, 255))
     print('ibuprofen color')
@@ -99,11 +96,6 @@ def rgb2hsv(r, g, b):
     v = int(v * 255)
     return (h, s, v)
 
-
-i2c = busio.I2C(SCL, SDA)
-pca = PCA9685(i2c)
-pca.frequency = 100
-momo.Motor_Speed(pca,0)
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
 PORT_NAME = '/dev/ttyUSB0'
@@ -156,13 +148,13 @@ if __name__ == "__main__":
                         print("right")
                         momo.Motor_Speed(pca,0.15)
                         servo7.angle = 60
-                        time.sleep(0.025)
+                        #time.sleep(0.025)
                 elif cx>120:
                     if cx<320:
                         if cx<220:
                             print("center")
                             servo7.angle = 95
-                            time.sleep(0.025)
+                            #time.sleep(0.025)
                             scan_data = [0]*360
                             for scan in lidar.iter_scans():
                                 for (_, angle, distance) in scan:
@@ -173,7 +165,7 @@ if __name__ == "__main__":
                                         if distance < 3000:
                                             update_steering_angle(95)
                                             momo.Motor_Speed(pca,0.15)
-                                            time.sleep(0.025)
+                                            #time.sleep(0.025)
                                             if distance < 1000:
                                                 momo.Motor_Speed(pca,0)
                                                 exit()
@@ -189,12 +181,12 @@ if __name__ == "__main__":
                             print("left")
                             momo.Motor_Speed(pca,0.15)
                             servo7.angle = 130
-                            time.sleep(0.025)
+                            #time.sleep(0.025)
             else:
                 print("DNR")
                 momo.Motor_Speed(pca,0.15)
                 servo7.angle = 60
-                time.sleep(0.025)
+                #time.sleep(0.025)
     finally:
         cv2.destroyAllWindows()
         cap.release()
