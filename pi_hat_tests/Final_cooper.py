@@ -154,7 +154,7 @@ if __name__ == "__main__":
                     else:
                         print("none")
                         Motor_Speed(pca, 0.15)
-                        servo7.angle = 60
+                        servo7.angle = 120
                         time.sleep(0.1)
             else:
                 print("DNR")
