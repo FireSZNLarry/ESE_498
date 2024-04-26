@@ -112,12 +112,10 @@ def Motor_Speed(pca,percent):
    pca.channels[15].duty_cycle = math.floor(speed)
    print(speed/65535)
 
-#initialization
-pca = Servo_Motor_Initialization()
-Motor_Start(pca)
-
-
 if __name__ == "__main__":
+    #initialization
+    pca = Servo_Motor_Initialization()
+    Motor_Start(pca)
     try:
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
         cap.set(3, IMAGE_WIDTH)
