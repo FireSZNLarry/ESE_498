@@ -112,6 +112,16 @@ if __name__ == "__main__":
     #initialization
     pca = Servo_Motor_Initialization()
     Motor_Start(pca)
+    Motor_Speed(pca, 0)   #stop/neutral position
+    time.sleep(2)
+    Motor_Speed(pca, -0.3)   #reverse
+    time.sleep(3)
+    Motor_Speed(pca, 0)
+    time.sleep(2)
+    Motor_Speed(pca, 0.3)   #forward
+    time.sleep(3)
+    Motor_Speed(pca, 0)    
+    time.sleep(2)
     
     try:
         cap = cv2.VideoCapture(CAMERA_DEVICE_ID)
