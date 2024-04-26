@@ -39,22 +39,14 @@ pca.frequency = 100
 channel_num = 14
 servo7 = servo.Servo(pca.channels[channel_num])
 
-def isset(v):
-    try:
-        type (eval(v))
-    except:
-        return 0
-    else:
-        return 1
+#def isset(v):
+#    try:
+#        type (eval(v))
+#    except:
+#        return 0
+#    else:
+#        return 1
 
-#def on_mouse_click(event, x, y, flags, frame):
-#    global colors
-#    if event == cv2.EVENT_LBUTTONUP:
-#        color_bgr = frame[y, x]
-#        color_rgb = tuple(reversed(color_bgr))
-#        color_hsv = rgb2hsv(color_rgb[0], color_rgb[1], color_rgb[2])
-#        colors.append(color_hsv)
-        
 def hsv2rgb(h, s, v):
     h = float(h) * 2
     s = float(s) / 255
