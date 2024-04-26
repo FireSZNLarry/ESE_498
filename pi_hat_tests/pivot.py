@@ -134,6 +134,12 @@ if __name__ == "__main__":
                         Motor_Speed(pca, 0.15) 
                         servo7.angle = 60
                         time.sleep(0.1)
+                        Motor_Speed(pca, 0) 
+                        servo7.angle = 130
+                        time.sleep(0.1)
+                        Motor_Speed(pca, -0.15) 
+                        servo7.angle = 130
+                        time.sleep(0.1)
                 elif cx>120:
                     if cx<320:
                         if cx<220:
@@ -146,10 +152,22 @@ if __name__ == "__main__":
                             Motor_Speed(pca, 0.15)
                             servo7.angle = 130
                             time.sleep(0.1)
+                            Motor_Speed(pca, 0) 
+                            servo7.angle = 60
+                            time.sleep(0.1)
+                            Motor_Speed(pca, -0.15) 
+                            servo7.angle = 60
+                            time.sleep(0.1)
             else:
                 print("DNR")
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 60
+                time.sleep(0.1)
+                Motor_Speed(pca, 0)
+                servo7.angle = 130
+                time.sleep(0.1)
+                Motor_Speed(pca, -0.15) 
+                servo7.angle = 130
                 time.sleep(0.1)
     finally:
         cv2.destroyAllWindows()
