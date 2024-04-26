@@ -155,13 +155,13 @@ if __name__ == "__main__":
                         print("right")
                         Motor_Speed(pca, 0.15) 
                         servo7.angle = 60
-                        time.sleep(0.1)
+                        time.sleep(0.05)
                 elif cx>120:
                     if cx<320:
                         if cx<220:
                             print("center")
                             servo7.angle = 95
-                            time.sleep(0.1)
+                            time.sleep(0.05)
                             scan_data = [0]*360
                             for scan in lidar.iter_scans():
                                 for (_, angle, distance) in scan:
@@ -172,8 +172,8 @@ if __name__ == "__main__":
                                         if distance < 3000:
                                             update_steering_angle(95)
                                             momo.Motor_Speed(pca,0.15)
-                                            time.sleep(0.1)
-                                            if distance < 1500:
+                                            time.sleep(0.05)
+                                            if distance < 1800:
                                                 momo.Motor_Speed(pca,0)
                                                 exit()
                                 for angle in range(360):
@@ -188,12 +188,12 @@ if __name__ == "__main__":
                             print("left")
                             Motor_Speed(pca, 0.15)
                             servo7.angle = 130
-                            time.sleep(0.1)
+                            time.sleep(0.05)
             else:
                 print("DNR")
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 60
-                time.sleep(0.1)
+                time.sleep(0.05)
     finally:
         cv2.destroyAllWindows()
         cap.release()
