@@ -105,7 +105,7 @@ def main():
                 # Update visualization
                 speed = 0.15
                 update_motor_speed(speed)
-                time.sleep(01)
+                time.sleep(1)
                 lcd.fill((0, 0, 0))
                 for angle in range(360):
                     distance = scan_data[angle]
