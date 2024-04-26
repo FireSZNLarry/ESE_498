@@ -155,12 +155,15 @@ if __name__ == "__main__":
                     if cx>0:
                         print("right")
                         Motor_Speed(pca, 0)
+                        time.sleep(1)                        
                         servo7.angle = 60
                         time.sleep(1)
                         Motor_Speed(pca, 0.15)
+                        time.sleep(1)
                         servo7.angle = 60
                         time.sleep(1)
                         Motor_Speed(pca, 0)
+                        time.sleep(1)
                         servo7.angle = 130
                         time.sleep(1)
                         Motor_Speed(pca, -0.3)
@@ -170,17 +173,21 @@ if __name__ == "__main__":
                         if cx<220:
                             print("center")
                             Motor_Speed(pca, 0)
+                            time.sleep(1)
                             servo7.angle = 95
                             time.sleep(1)
                         else:
                             print("left")
                             Motor_Speed(pca, 0)
+                            time.sleep(1)
                             servo7.angle = 130
                             time.sleep(1)
                             Motor_Speed(pca, 0.15)
+                            time.sleep(1)
                             servo7.angle = 130
                             time.sleep(1)
                             Motor_Speed(pca, 0)
+                            time.sleep(1)
                             servo7.angle = 60
                             time.sleep(1)
                             Motor_Speed(pca, -0.3)
@@ -190,9 +197,11 @@ if __name__ == "__main__":
                 Motor_Speed(pca, 0)
                 time.sleep(1)
                 Motor_Speed(pca, 0.15)
+                time.sleep(1)
                 servo7.angle = 60
                 time.sleep(1)
                 Motor_Speed(pca, 0)
+                time.sleep(1)
                 servo7.angle = 130
                 time.sleep(1)
                 Motor_Speed(pca, -0.3)
