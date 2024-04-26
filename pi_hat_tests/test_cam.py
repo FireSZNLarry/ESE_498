@@ -104,7 +104,7 @@ def main():
              #   update_steering_angle(90)
 
                 # Update visualization
-                lcd.fill((0, 0, 0))
+                #lcd.fill((0, 0, 0))
                 for angle in range(360):
                     distance = scan_data[angle]
                     if distance:
