@@ -38,10 +38,6 @@ def update_steering_angle(angle):
 def scale_lidar_distance(distance, max_distance=3000):
     return min(distance, max_distance) / max_distance
 
-#desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
-#distance_tolerance = 100  # mm tolerance for distance maintenance
-#max_speed = 0.5
-#turn_sensitivity = 10  # Higher sensitivity in turning
 def main():
     try:
         scan_data = [0]*360
@@ -52,10 +48,10 @@ def main():
                     if 80 <= angle < 200:
                         scan_data[angle] = distance
                         print(distance)
-                        if distance < 800:
+                        if distance < 1000:
                           update_steering_angle(70)
                           time.sleep(0.1)
-                          if distance < 400:
+                          if distance < 700:
                               momo.Motor_Speed(pca,0)
                               
                 for angle in range(360):
