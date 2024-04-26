@@ -13,10 +13,10 @@ def Servo_Motor_Initialization():
 
 def Motor_Start(pca):
    x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
-   Motor_Speed(pca, 1)
+   Motor_Speed(pca, 0.3)
    time.sleep(2)
    y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
-   Motor_Speed(pca, -1)
+   Motor_Speed(pca, -0.3)
    time.sleep(2)
    z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
    
