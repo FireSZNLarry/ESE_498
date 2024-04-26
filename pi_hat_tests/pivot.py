@@ -149,41 +149,49 @@ if __name__ == "__main__":
                 if cx<120:
                     if cx>0:
                         print("right")
+                        Motor_Speed(pca, 0)
+                        servo7.angle = 60
+                        time.sleep(1)
                         Motor_Speed(pca, 0.15)
                         servo7.angle = 60
-                        time.sleep(3)
+                        time.sleep(1)
                         Motor_Speed(pca, 0)
                         servo7.angle = 130
-                        time.sleep(3)
+                        time.sleep(1)
                         Motor_Speed(pca, -0.3)
-                        time.sleep(3)
+                        time.sleep(1)
                 elif cx>120:
                     if cx<320:
                         if cx<220:
                             print("center")
                             Motor_Speed(pca, 0)
                             servo7.angle = 95
-                            time.sleep(3)
+                            time.sleep(1)
                         else:
                             print("left")
+                            Motor_Speed(pca, 0)
+                            servo7.angle = 130
+                            time.sleep(1)
                             Motor_Speed(pca, 0.15)
                             servo7.angle = 130
-                            time.sleep(3)
+                            time.sleep(1)
                             Motor_Speed(pca, 0)
                             servo7.angle = 60
-                            time.sleep(3)
+                            time.sleep(1)
                             Motor_Speed(pca, -0.3)
-                            time.sleep(3)
+                            time.sleep(1)
             else:
                 print("DNR")
+                Motor_Speed(pca, 0)
+                time.sleep(1)
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 60
-                time.sleep(3)
+                time.sleep(1)
                 Motor_Speed(pca, 0)
                 servo7.angle = 130
-                time.sleep(3)
+                time.sleep(1)
                 Motor_Speed(pca, -0.3)
-                time.sleep(3)
+                time.sleep(1)
     finally:
         cv2.destroyAllWindows()
         cap.release()
