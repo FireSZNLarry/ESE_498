@@ -195,13 +195,6 @@ if __name__ == "__main__":
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 60
                 time.sleep(0.1)
-                
-            ##
-            # record end time
- #           end_time = time.time()
-            # calculate FPS
- #           seconds = end_time - start_time
- #           fps = 1.0 / seconds
             # if key pressed is 'Esc' then exit the loop
             if cv2.waitKey(33) == 27:
                 break
