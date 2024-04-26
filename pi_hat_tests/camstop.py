@@ -166,7 +166,7 @@ if __name__ == "__main__":
                             for scan in lidar.iter_scans():
                                 for (_, angle, distance) in scan:
                                     angle = int(angle)
-                                    if 120 <= angle < 160:
+                                    if 130 <= angle < 150:
                                         scan_data[angle] = distance
                                         print(distance)
                                         if distance < 3000:
