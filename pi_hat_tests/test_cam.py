@@ -44,6 +44,41 @@ def update_steering_angle(angle):
 def scale_lidar_distance(distance, max_distance=4000):
     return min(distance, max_distance) / max_distance
 
+def Servo_Motor_Initialization():
+    i2c_bus = busio.I2C(SCL,SDA)
+    pca = PCA9685(i2c_bus)
+    pca.frequency = 100
+    return pca
+
+def Motor_Start(pca):
+    x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
+    #Motor_Speed(pca, 0.1)
+    time.sleep(2)
+    y = input("If the LED just blinked TWICE, then press the 'ENTER'on keyboard.")
+    #Motor_Speed(pca, -0.1)
+    time.sleep(2)
+    z = input("Now the LED should be in solid green, indicating the initialization is complete. Press 'ENTER' on keyboard to proceed")
+   
+
+def Motor_Speed(pca,percent):
+    #converts a -1 to 1 value to 16-bit duty cycle
+    speed = ((percent) * 3277) + 65535 * 0.15
+    pca.channels[15].duty_cycle = math.floor(speed)
+    #print(speed/65535)
+       
+    #initialization
+pca = Servo_Motor_Initialization()
+Motor_Start(pca)
+
+
+
+##
+# Function to update motor speed
+def update_motor_speed(speed):
+    # Maps speed range -1.0 to 1.0 to appropriate PWM values
+    pwm_value = int((speed * 32767) + 32767)
+    motor.duty_cycle = pwm_value
+
 # Control parameters for centering in a room or corridor
 desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
 distance_tolerance = 100  # mm tolerance for distance maintenance
@@ -53,6 +88,8 @@ turn_sensitivity = 10  # Higher sensitivity in turning
 def main():
     try:
         scan_data = [0]*360
+        speed = 0.15
+        update_motor_speed(speed)
         while True:
             for scan in lidar.iter_scans():
                 for (_, angle, distance) in scan:
