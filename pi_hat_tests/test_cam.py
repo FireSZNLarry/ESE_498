@@ -8,25 +8,17 @@ from board import SCL, SDA
 from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
 from adafruit_rplidar import RPLidar
-
 import motorControl as momo
-
 
 i2c = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c)
 pca.frequency = 100
 channel_num = 14
-
-
-
-
 momo.Motor_Speed(pca,0.175)
 
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
 
-
-# LIDAR setup
 PORT_NAME = '/dev/ttyUSB0'
 lidar = RPLidar(None, PORT_NAME, timeout=3)
 
@@ -34,26 +26,17 @@ lidar = RPLidar(None, PORT_NAME, timeout=3)
 i2c_bus = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c_bus)
 pca.frequency = 100
-motor_channel = 15
 steering_channel = 14
 
 servo_steering = servo.Servo(pca.channels[steering_channel])
 motor = pca.channels[motor_channel]
 
-
-# Helper function to update steering angle
 def update_steering_angle(angle):
     servo_steering.angle = angle
 
-# Helper function to scale LIDAR distance data
 def scale_lidar_distance(distance, max_distance=4000):
     return min(distance, max_distance) / max_distance
 
-##
-# Function to update motor speed
-
-
-# Control parameters for centering in a room or corridor
 desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
 distance_tolerance = 100  # mm tolerance for distance maintenance
 max_speed = 0.5
@@ -73,30 +56,7 @@ def main():
                           time.sleep(0.1)
                           if distance < 400:
                               momo.Motor_Speed(pca,0)
-                        
-
-                # Calculate errors for both right and left (90 degrees and 270 degrees respectively)
-#                right_distance = scan_data[90] or desired_distance_from_wall
- #               left_distance = scan_data[270] or desired_distance_from_wall
-  #              right_error = desired_distance_from_wall - right_distance
-   #             left_error = desired_distance_from_wall - left_distance
-
-                # Calculate motor speed and steering angle based on average error
-    #            average_error = (right_error + left_error) / 2
-     #           if abs(average_error) > distance_tolerance:
-      #              speed = (max_speed * average_error / desired_distance_from_wall)
-       #             speed = max(-max_speed, min(max_speed, speed))
-        #        else:
-         #           speed = 0
-          #      update_motor_speed(speed)
-
-                # Adjust steering based on error difference
-           #     error_difference = left_error - right_error
-            #    steering_angle = 90 + (error_difference / distance_tolerance) * turn_sensitivity
-             #   update_steering_angle(90)
-
-                # Update visualization
-                #lcd.fill((0, 0, 0))
+                              
                 for angle in range(360):
                     distance = scan_data[angle]
                     if distance:
