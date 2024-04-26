@@ -22,13 +22,9 @@ channel_num = 14
 
 momo.Motor_Speed(pca,0.175)
 
-# Set up pygame for LIDAR visualization
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
-#lcd = pygame.display.set_mode((320, 240))
-#pygame.mouse.set_visible(False)
-#lcd.fill((0, 0, 0))
-#pygame.display.update()
+
 
 # LIDAR setup
 PORT_NAME = '/dev/ttyUSB0'
@@ -44,10 +40,6 @@ steering_channel = 14
 servo_steering = servo.Servo(pca.channels[steering_channel])
 motor = pca.channels[motor_channel]
 
-# Helper function to update motor speed
-def update_motor_speed(speed):
-    pwm_value = int((speed * 32767) + 32767)
-    motor.duty_cycle = pwm_value
 
 # Helper function to update steering angle
 def update_steering_angle(angle):
