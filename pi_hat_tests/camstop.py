@@ -16,7 +16,7 @@ import queue
 import motorControl as momo
 
 
-Motor_Speed(pca, 0) 
+
 
 
 CAMERA_DEVICE_ID = 0
@@ -98,6 +98,7 @@ def rgb2hsv(r, g, b):
 def Motor_Speed(pca,percent):
     speed = ((percent) * 3277) + 65535 * 0.15
     pca.channels[15].duty_cycle = math.floor(speed)
+Motor_Speed(pca, 0) 
 
 i2c = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c)
