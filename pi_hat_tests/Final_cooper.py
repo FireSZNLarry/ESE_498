@@ -160,8 +160,7 @@ if __name__ == "__main__":
             if isset('best_cnt'):
                 M = cv2.moments(best_cnt)
                 cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
-                cv2.circle(frame,(cx,cy),20,255,-1) #size of dot, size of window, 
-                #print("Central pos: (%d, %d)" % (cx,cy))
+#                cv2.circle(frame,(cx,cy),20,255,-1)
                 if cx<120:
                     if cx>10:
                         print("right")
@@ -195,11 +194,6 @@ if __name__ == "__main__":
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 60
                 time.sleep(0.1)
-#            if cv2.waitKey(33) == 27:
-#                break
-#    except Exception as e:
-#        print(e)
     finally:
-        # Clean up and exit the program
         cv2.destroyAllWindows()
         cap.release()
