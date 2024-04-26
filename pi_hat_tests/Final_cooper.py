@@ -196,43 +196,36 @@ if __name__ == "__main__":
                         print("right")
                         Motor_Speed(pca, 0.15) 
                         servo7.angle = 70
-                        time.sleep(2)
+                        time.sleep(1)
                     else:
                         print("none")
                         Motor_Speed(pca, 0.15)
                         servo7.angle = 70
-                        time.sleep(2)
+                        time.sleep(1)
                 elif cx>120:
                     if cx<310:
                         if cx<220:
                             print("center")
                             Motor_Speed(pca, 0)  
                             servo7.angle = 95
-                            time.sleep(2)
+                            time.sleep(1)
                         else:
                             print("left")
                             Motor_Speed(pca, 0.15)
                             servo7.angle = 120
-                            time.sleep(2)
+                            time.sleep(1)
                     else:
                         print("none")
                         Motor_Speed(pca, 0.15)
                         servo7.angle = 70
-                        time.sleep(2)
+                        time.sleep(1)
             else:
                 print("DNR")
                 Motor_Speed(pca, 0.15)
                 servo7.angle = 70
-                time.sleep(2)
+                time.sleep(1)
                 
             ##
-           
-
-            # Show the original and processed image
-            #res = cv2.bitwise_and(frame, frame, mask=thresh2)
-            #cv2.imshow('frame', visualize_fps(frame, fps))
-            #cv2.imshow('thresh', visualize_fps(thresh2, fps))
-            # ----------------------------------------------------------------------
             # record end time
             end_time = time.time()
             # calculate FPS
