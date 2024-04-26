@@ -26,7 +26,7 @@ import math
 from board import SCL,SDA
 import busio
 from adafruit_motor import servo
-#from adafruit_pca9685 import PCA9685
+from adafruit_pca9685 import PCA9685
 #import os
 #from math import cos, sin, pi, floor
 #import pygame
