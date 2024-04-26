@@ -160,7 +160,7 @@ if __name__ == "__main__":
                             i2c = busio.I2C(SCL, SDA)
                             pca = PCA9685(i2c)
                             pca.frequency = 100
-                            momo.Motor_Speed(pca,0)
+                            momo.Motor_Speed(pca,0.15)
                             os.putenv('SDL_FBDEV', '/dev/fb1')
                             pygame.init()
                             PORT_NAME = '/dev/ttyUSB0'
