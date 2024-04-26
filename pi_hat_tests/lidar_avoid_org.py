@@ -44,11 +44,6 @@ servo7 = servo.Servo(pca.channels[channel_num])
 
 # here motor
 
-def Servo_Motor_Initialization():
-       i2c_bus = busio.I2C(SCL,SDA)
-       pca = PCA9685(i2c_bus)
-       pca.frequency = 100
-       return pca
 
 def Motor_Start(pca):
        x = input("Press and hold EZ button. Once the LED turns red, immediately relase the button. After the LED blink red once, press 'ENTER'on keyboard.")
