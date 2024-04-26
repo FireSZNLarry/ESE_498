@@ -35,7 +35,7 @@ motor = pca.channels[motor_channel]
 def update_steering_angle(angle):
     servo_steering.angle = angle
 
-def scale_lidar_distance(distance, max_distance=4000):
+def scale_lidar_distance(distance, max_distance=3000):
     return min(distance, max_distance) / max_distance
 
 desired_distance_from_wall = 1524  # desired distance from the wall is 5 feet (1524 mm)
@@ -66,8 +66,6 @@ def main():
                         x = scaled_distance * cos(radians) * 119
                         y = scaled_distance * sin(radians) * 119
                         point = (160 + int(x), 120 + int(y))
-                        #lcd.set_at(point, pygame.Color(255, 255, 255))
-                #pygame.display.update()
 
     except KeyboardInterrupt:
         print('Stopping.')
