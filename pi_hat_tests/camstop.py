@@ -15,7 +15,6 @@ import threading
 import queue
 import motorControl as momo
 
-
 CAMERA_DEVICE_ID = 0
 IMAGE_WIDTH = 320
 IMAGE_HEIGHT = 240
@@ -99,7 +98,7 @@ def Motor_Speed(pca,percent):
 i2c = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c)
 pca.frequency = 100
-#momo.Motor_Speed(pca,0.175)
+momo.Motor_Speed(pca,0)
 os.putenv('SDL_FBDEV', '/dev/fb1')
 pygame.init()
 PORT_NAME = '/dev/ttyUSB0'
