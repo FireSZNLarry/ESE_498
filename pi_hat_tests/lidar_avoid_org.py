@@ -61,9 +61,9 @@ def Motor_Speed(pca,percent):
        pca.channels[15].duty_cycle = math.floor(speed)
        #print(speed/65535)
        
-    #initialization
-    pca = Servo_Motor_Initialization()
-    Motor_Start(pca)
+#initialization
+pca = Servo_Motor_Initialization()
+Motor_Start(pca)
 # here
 
 # Function to update motor speed
