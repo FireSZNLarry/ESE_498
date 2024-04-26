@@ -184,10 +184,10 @@ if __name__ == "__main__":
                 momo.Motor_Speed(pca,0.15)
                 servo7.angle = 60
                 time.sleep(1)
-                momo.Motor_Speed(pca,0.15)
+                momo.Motor_Speed(pca,0)
                 servo7.angle = 130
                 time.sleep(1)
-                momo.Motor_Speed(pca,0.15)
+                momo.Motor_Speed(pca,-0.15)
                 time.sleep(1)
     finally:
         cv2.destroyAllWindows()
@@ -195,3 +195,4 @@ if __name__ == "__main__":
         lidar.stop()
         lidar.disconnect()
         pygame.quit()
+        GPIO.cleanup()
