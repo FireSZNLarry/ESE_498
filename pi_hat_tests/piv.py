@@ -31,13 +31,37 @@ servo_steering = servo.Servo(pca.channels[steering_channel])
 
 momo.Motor_Speed(pca,0)
 time.sleep(0.5)
-momo.Motor_Speed(pca,0.15)
+momo.Motor_Speed(pca,-0.15)
+update_steering_angle(70)
+time.sleep(0.5)
+momo.Motor_Speed(pca,0)
+update_steering_angle(95)
 time.sleep(0.5)
 momo.Motor_Speed(pca,0.15)
+update_steering_angle(130)
+momo.Motor_Speed(pca,0)
+time.sleep(0.5)
+momo.Motor_Speed(pca,-0.15)
+update_steering_angle(70)
+time.sleep(0.5)
+momo.Motor_Speed(pca,0)
+update_steering_angle(95)
 time.sleep(0.5)
 momo.Motor_Speed(pca,0.15)
+update_steering_angle(130)
+momo.Motor_Speed(pca,0)
+time.sleep(0.5)
+momo.Motor_Speed(pca,-0.15)
+update_steering_angle(70)
+time.sleep(0.5)
+momo.Motor_Speed(pca,0)
+update_steering_angle(95)
+time.sleep(0.5)
+momo.Motor_Speed(pca,0.15)
+update_steering_angle(130)
 
+def update_steering_angle(angle):
+    servo_steering.angle = angle
 
-
-
+    
 
